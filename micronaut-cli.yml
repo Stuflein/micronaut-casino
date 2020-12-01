@@ -1,0 +1,5 @@
+profile: service
+defaultPackage: casino
+---
+testFramework: junit
+sourceLanguage: java
