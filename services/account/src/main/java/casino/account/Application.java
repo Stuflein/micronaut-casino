@@ -1,4 +1,4 @@
-package account;
+package casino.account;
 
 import io.micronaut.runtime.Micronaut;
 

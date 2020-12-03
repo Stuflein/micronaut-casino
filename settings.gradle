@@ -1,4 +1,5 @@
 rootProject.name="casino"
 include 'services:account'
 include 'services:cardgame'
+include 'api'
 

@@ -22,6 +22,8 @@ configurations {
 }
 
 dependencies {
+    implementation project(":api")
+
     annotationProcessor platform("io.micronaut:micronaut-bom:$micronautVersion")
     annotationProcessor "io.micronaut:micronaut-inject-java"
     annotationProcessor "io.micronaut:micronaut-validation"
@@ -33,6 +35,11 @@ dependencies {
     implementation "io.micronaut:micronaut-http-server-netty"
     implementation "io.micronaut:micronaut-http-client"
     runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
+
+    //DB
+    implementation("io.micronaut.sql:micronaut-vertx-mysql-client")
+
+
     testAnnotationProcessor platform("io.micronaut:micronaut-bom:$micronautVersion")
     testAnnotationProcessor "io.micronaut:micronaut-inject-java"
     testImplementation platform("io.micronaut:micronaut-bom:$micronautVersion")

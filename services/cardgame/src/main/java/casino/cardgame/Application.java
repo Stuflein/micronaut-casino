@@ -1,4 +1,4 @@
-package cardgame;
+package casino.cardgame;
 
 import io.micronaut.runtime.Micronaut;
 
