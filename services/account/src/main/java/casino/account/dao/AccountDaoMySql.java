@@ -89,7 +89,7 @@ public class AccountDaoMySql implements AccountDao {
         return client.preparedQuery(sql).rxExecute(Tuple.of(username, email, credit, id.toString()))
                 .flatMap(rows -> {
                     if (rows.rowCount() == 1) {
-                        return getAccount(id).toSingle();
+                        return getAccount(id);
                     } else {
                         return Single.error(new SQLException("UPDATE account failed"));
                     }
