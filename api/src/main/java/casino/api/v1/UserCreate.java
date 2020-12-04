@@ -27,6 +27,10 @@ public class UserCreate {
         return password;
     }
 
+    public long getCredit() {
+        return credit;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -40,6 +44,6 @@ public class UserCreate {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getUsername(), getEmail(), getPassword(), credit);
+        return Objects.hash(getUsername(), getEmail(), getCredit());
     }
 }

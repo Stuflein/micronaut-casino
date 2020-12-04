@@ -6,12 +6,16 @@ import java.util.UUID;
 public class User {
     private UUID userId;
     private String username;
+    private String email;
     private long credit;
 
     public UUID getUserId() {
         return userId;
     }
 
+    public String getEmail() {
+        return email;
+    }
 
     public String getUsername() {
         return username;
@@ -23,9 +27,10 @@ public class User {
     }
 
 
-    public User(UUID userId, String username, long credit) {
+    public User(UUID userId, String username,String email, long credit) {
         this.userId = userId;
         this.username = username;
+        this.email = email;
         this.credit = credit;
     }
 
@@ -35,12 +40,13 @@ public class User {
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
         return getCredit() == user.getCredit() &&
+                getEmail() == user.getEmail() &&
                 getUserId().equals(user.getUserId()) &&
                 getUsername().equals(user.getUsername());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getUserId(), getUsername(), getCredit());
+        return Objects.hash(getUserId(), getUsername(), getEmail(), getCredit());
     }
 }
