@@ -1,4 +1,31 @@
 micronaut:
-  application:
-    name: account
+    application:
+        name: account
+    server:
+        host: localhost
+        port: 8091
+        cors:
+            enabled: true
+            configurations:
+                web:
+                    allowedOrigins:
+                        - http://localhost:3306
+        multipart:
+            enabled: false
+        log-handled-exceptions: true
+
+jackson:
+    module-scan: true
+    bean-introspection-module: true
+    locale: de_DE
+    time-zone: Europe/Berlin
+vertx:
+    mysql:
+        client:
+            port: 3316
+            host: localhost
+            database: casino_db
+            user: root
+            password: dev
+            max-size: 5
 

@@ -38,8 +38,12 @@ dependencies {
 
     //DB
     implementation("io.micronaut.sql:micronaut-vertx-mysql-client")
+    implementation( 'io.micronaut:micronaut-jdbc:2.2.5')
+    runtime 'io.micronaut.sql:micronaut-jdbc-dbcp'
+    runtime 'mysql:mysql-connector-java:8.0.15'
 
 
+    //testing
     testAnnotationProcessor platform("io.micronaut:micronaut-bom:$micronautVersion")
     testAnnotationProcessor "io.micronaut:micronaut-inject-java"
     testImplementation platform("io.micronaut:micronaut-bom:$micronautVersion")

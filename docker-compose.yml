@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  mysql:
+    container_name: db
+    image: library/mysql:8.0
+    restart: always
+    ports:
+      - 3306:3306
+    volumes:
+      - ./db/db.mySqlDB.sql:/docker-entrypoint-initdb.d/mySqlDB.sql
+    #      - ./db/db.mySqlDB.db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: dev
+      MYSQL_USER: root
+      MYSQL_DATABASE: casino_db
