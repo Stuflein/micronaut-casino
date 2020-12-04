@@ -22,7 +22,7 @@ jackson:
 vertx:
     mysql:
         client:
-            port: 3316
+            port: 3306
             host: localhost
             database: casino_db
             user: root
