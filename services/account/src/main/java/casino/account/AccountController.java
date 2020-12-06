@@ -10,7 +10,11 @@ import io.reactivex.Single;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Singleton
 @Controller("casino/account")
@@ -46,5 +50,12 @@ public class AccountController implements Operations<User, UserCreate> {
             if (b) return HttpStatus.OK;
             else return HttpStatus.UNAUTHORIZED;
         });
+    }
+
+    @Get("/all")
+    public Single<List<User>> getAll(){
+        List<User> liste = new ArrayList<>();
+        return accountService.getAll().map(accountList -> accountList
+                 .stream().map(acc -> acc.getApiUser()).collect(Collectors.toList()));
     }
 }
