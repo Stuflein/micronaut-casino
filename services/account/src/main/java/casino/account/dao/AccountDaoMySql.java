@@ -6,6 +6,7 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.vertx.reactivex.mysqlclient.MySQLPool;
 import io.vertx.reactivex.sqlclient.Row;
+import io.vertx.reactivex.sqlclient.RowIterator;
 import io.vertx.reactivex.sqlclient.RowSet;
 import io.vertx.reactivex.sqlclient.Tuple;
 import org.slf4j.Logger;
@@ -32,15 +33,18 @@ public class AccountDaoMySql implements AccountDao {
         String uuid = UUID.randomUUID().toString();
         boolean guest = !player;
         String sql = "INSERT INTO account (id, username, email, credit, " +
-                "player, guest) VALUES (?, ?, ?, ?, ?, ?, ? )";
+                "player, guest) VALUES (?, ?, ?, ?, ?, ?)";
         Tuple tuple = Tuple.of(uuid, username, email, credit, player, guest);
-        return client.preparedQuery(sql).rxExecute(tuple).map(RowSet::iterator).flatMap(it -> {
-            if (!it.hasNext()) {
-                logger.error("insert into account for username: " + username + "  FAILED");
-                return Single.error(new SQLException());
-            }
-            return Single.just(fromSql(it.next()));
-        });
+        return client.preparedQuery(sql).rxExecute(tuple)
+                .flatMap(rowSet -> {
+                    if (rowSet.rowCount() == 1) {
+                        logger.info("INSERT COMPLETE");
+                        return getAccount(UUID.fromString(uuid));
+                    } else {
+                        logger.info("INSERT ACCOUNT FAILED for username " + username + " for id:  " + uuid );
+                        return Single.error(new SQLException());
+                    }
+                });
     }
 
     @Override
@@ -65,7 +69,7 @@ public class AccountDaoMySql implements AccountDao {
                     if (rowIterator.hasNext()) {
                         return Single.just(fromSql(rowIterator.next()));
                     } else {
-                        logger.info("Account not in DB:   " + username );
+                        logger.info("Account not in DB:   " + username);
                         return Single.error(new SQLException("Account not in DB"));
                     }
                 });
@@ -74,12 +78,11 @@ public class AccountDaoMySql implements AccountDao {
     @Override
     public Single<List<Account>> getAll() {
         String sql = "SELECT * FROM account";
-        //List<Account> liste = new ArrayList<>();
-        return client.preparedQuery(sql).rxExecute().map(RowSet::iterator).flatMap(rows ->{
-            Iterable<Row> it = rows::getDelegate;
-          return  Observable.fromIterable(it).map((Row delegateRow) -> {
-               return fromSql(Row.newInstance((io.vertx.sqlclient.Row) delegateRow)) ;
-            }).toList();
+        return client.preparedQuery(sql).rxExecute().flatMap(rows -> {
+
+
+            Iterable<Row> it = rows::iterator;
+            return Observable.fromIterable(it).map(this::fromSql).toList() ;
         });
     }
 
@@ -125,8 +128,8 @@ public class AccountDaoMySql implements AccountDao {
                 result.getBoolean("account_expired"),
                 result.getBoolean("account_locked"),
                 result.getBoolean("password_expired"),
-                result.getLocalDateTime("last_login").toEpochSecond(ZoneOffset.of("Europe/Berlin")),
-                result.getLocalDateTime("created_at").toEpochSecond(ZoneOffset.of("Europe/Berlin")),
+                result.getLocalDateTime("last_login").toEpochSecond(ZoneOffset.UTC),
+                result.getLocalDateTime("created_at").toEpochSecond(ZoneOffset.UTC),
                 role
         );
     }

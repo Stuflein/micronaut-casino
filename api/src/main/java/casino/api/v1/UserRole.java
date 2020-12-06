@@ -1,7 +1,8 @@
 package casino.api.v1;
 
 public enum UserRole {
-    PLAYER("Player"), ADMIN("Admin"), GUEST("Guest");
+    PLAYER("Player"),
+    GUEST("Guest");
 
     UserRole(String role) {
         this.role = role;
