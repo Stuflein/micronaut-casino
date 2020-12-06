@@ -28,7 +28,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Singleton
-//@Secured(SecurityRule.IS_ANONYMOUS)
 @Controller("casino/account")
 public class AccountController implements Operations<User, UserCreate> {
 
