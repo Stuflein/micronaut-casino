@@ -3,10 +3,10 @@ package casino.account;
 import casino.account.dao.AccountDao;
 import casino.account.domain.Account;
 import casino.api.v1.UserCreate;
-import io.reactivex.Maybe;
 import io.reactivex.Single;
 
 import javax.inject.Inject;
+import java.util.List;
 import java.util.UUID;
 
 public class AccountService {
@@ -29,5 +29,8 @@ public class AccountService {
 
     public Single<Boolean> deleteAccount(UUID id) {
         return dao.delete(id);
+    }
+    public Single<List<Account>> getAll(){
+        return dao.getAll();
     }
 }
