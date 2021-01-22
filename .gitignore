@@ -13,5 +13,5 @@ out/
 .classpath
 # Log file
 *.log
-docker/
-db/
+/docker/
+/db/
