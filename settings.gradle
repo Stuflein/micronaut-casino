@@ -1,5 +1,6 @@
-rootProject.name="casino"
+rootProject.name = 'casino'
 include 'services:account'
 include 'services:cardgame'
 include 'api'
+include 'services:gateway'
 

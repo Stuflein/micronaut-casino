@@ -18,7 +18,7 @@ public interface Operations<T, U> {
     Single<T> get(UUID id);
 
     @Put("/{id}")
-    Single update(UUID id, T updateEntity);
+    Single<T> update(UUID id, T updateEntity);
 
     @Delete("/{id}")
     Single<HttpStatus> delete(UUID id);

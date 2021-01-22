@@ -1,10 +1,24 @@
 package casino.api.v1;
 
+import io.micronaut.core.annotation.Introspected;
+
+import java.io.Serializable;
 import java.util.Objects;
 
-public class UserLogin {
+@Introspected
+public class UserLogin implements Serializable {
+
+
+
     private String username;
+
     private String password;
+
+//    public UserLogin(String username, String password) {
+//        this.username = username;
+//        this.password = password;
+//    }
+
 
     public UserLogin(String username, String password) {
         this.username = username;

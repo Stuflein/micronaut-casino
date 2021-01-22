@@ -1,36 +1,27 @@
 package casino.account;
 
-import casino.account.dao.AccountDao;
 import casino.account.domain.Account;
 import casino.api.v1.UserCreate;
 import io.reactivex.Single;
 
-import javax.inject.Inject;
 import java.util.List;
 import java.util.UUID;
 
-public class AccountService {
-    @Inject
-    AccountDao dao;
+public interface AccountService {
+    /**
+     * Interface for all methods for Account
+     */
+    Single<Account> createAccount(UserCreate userCreate);
 
-    Single<Account> createAccount(UserCreate userCreate){
-        return dao.createAccount(userCreate.getUsername(), userCreate.getEmail(), userCreate.getCredit(), true);
-    }
-    Single<Account> getAccount(UUID id){
-        return dao.getAccount(id);
-    }
-    public Single<Account> getByUsername(String username) {
-        return dao.getAccount(username);
-    }
+    Single<Account> getAccount(UUID id);
 
-    public Single<Account> updateAccount(UUID id, String username, String email, long credit){
-        return dao.updateAccount(id, username, email, credit);
-    }
+    Single<Account> getByUsername(String username);
 
-    public Single<Boolean> deleteAccount(UUID id) {
-        return dao.delete(id);
-    }
-    public Single<List<Account>> getAll(){
-        return dao.getAll();
-    }
+    Single<Account> updateAccount(UUID id, String username, String email, long credit);
+
+    Single<Boolean> deleteAccount(UUID id);
+
+    Single<List<Account>> getAll();
+
+    Single<Boolean> isNotAccount(String username, String email);
 }
