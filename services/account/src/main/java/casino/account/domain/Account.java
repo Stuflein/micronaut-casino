@@ -1,8 +1,9 @@
 package casino.account.domain;
 
-import casino.account.security.UserState;
+import casino.account.auth.AccountUserState;
 import casino.api.v1.User;
 import casino.api.v1.UserRole;
+import casino.api.v1.UserState;
 
 import javax.annotation.Nullable;
 import java.io.Serializable;
@@ -11,22 +12,28 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-public class Account implements Serializable, UserState {
-    private UUID id;
-    private String username;
-    private String email;
-    private long credit;
-    private @Nullable String password;
-    private boolean enabled;
-    private boolean accountExpired;
-    private boolean accountLocked;
-    private boolean passwordExpired;
-    private long last_login;
-    private long created_at;
-    private List<UserRole> role;
+public class Account implements Serializable {
+    private final UUID id;
+    private final String username;
+    private final String email;
+    private final long credit;
+    @Nullable
+    private String password;
+    private final boolean enabled;
+    private final boolean accountExpired;
+    private final boolean accountLocked;
+    private final boolean passwordExpired;
+    private final long last_login;
+    private final long created_at;
+    private final List<UserRole> role;
 
 
-    public Account(UUID id, String username, String email, long credit, @Nullable String password, boolean enabled, boolean accountExpired, boolean accountLocked, boolean passwordExpired, long last_login, long created_at, UserRole role) {
+    public Account(UUID id, String username,
+                   String email, long credit,
+                   @Nullable String password, boolean enabled,
+                   boolean accountExpired, boolean accountLocked,
+                   boolean passwordExpired, long last_login,
+                   long created_at, UserRole role) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -53,8 +60,16 @@ public class Account implements Serializable, UserState {
         return email;
     }
 
-    public long getGuthaben() {
+    public long getCredit() {
         return credit;
+    }
+
+    public void setPassword(@Nullable String password) {
+        this.password = password;
+    }
+
+    public UserState getUserState() {
+        return new AccountUserState(this);
     }
 
     @Nullable
@@ -90,7 +105,7 @@ public class Account implements Serializable, UserState {
         return role.get(0);
     }
 
-   public User getApiUser(){
-        return new User(this.getId(), this.getUsername(), this.getEmail(), this.getGuthaben());
-   }
+    public User getApiUser() {
+        return new User(this.getId(), this.getUsername(), this.getEmail(), this.getCredit());
+    }
 }

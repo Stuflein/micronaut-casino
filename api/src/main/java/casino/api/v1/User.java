@@ -1,9 +1,10 @@
 package casino.api.v1;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
-public class User {
+public class User implements Serializable {
     private UUID userId;
     private String username;
     private String email;
@@ -26,8 +27,10 @@ public class User {
         return credit;
     }
 
+    public User() {
+    }
 
-    public User(UUID userId, String username,String email, long credit) {
+    public User(UUID userId, String username, String email, long credit) {
         this.userId = userId;
         this.username = username;
         this.email = email;

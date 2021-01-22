@@ -1,0 +1,107 @@
+micronaut:
+    io:
+        watch:
+            paths: src/main
+            enabled: true
+    application:
+        name: gateway-casino
+    server:
+        host: localhost
+        port: 4040
+        cors:
+#            enabled: true
+#            configurations:
+#                web:
+#                    allowedOrigins:
+#                        - http://localhost:8091
+#                    exposedHeaders:
+#                        - Content-Type
+#                        - Authorization
+#                        - Date
+
+        multipart:
+            enabled: true
+        log-handled-exceptions: true
+    security:
+        authentication: bearer
+        endpoints:
+            login:
+                enabled: false #LoginController custom implementation
+            oauth:
+                enabled: false
+        token:
+            jwt:
+                signatures:
+                    secret:
+                        generator:
+                            secret: 'MeinGeheimnisbleitGeheimMeinGeheMeinGeheimnisbleitGeheimMeinGehe'
+                            jws-algorithm: HS256
+                            base64: true
+                        validation:
+                            secret: 'MeinGeheimnisbleitGeheimMeinGeheMeinGeheimnisbleitGeheimMeinGehe'
+#                generator:
+#                    refresh-token:
+#                        secret: 'MeinGeheimnisbleitGeheimMeinGeheimnisbleitGeheimMeinGeheimnisbleitGeheimMeinGeheimnisbleitGeheim'
+#                        enabled: true
+#                        base64: true
+#                        jws-algorithm: HS256
+            propagation:
+                enabled: true
+                header:
+                    enabled: true
+                    header-name: "Authorization"
+                    prefix: "Bearer "
+                service-id-regex: "account-casino|cardgame-casino"
+#                uri-regex: "http://localhost:(8091|8092)"
+    http:
+        services:
+            account-casino:
+                urls:
+                    - "http://localhost:8091"
+            cardgame-casino:
+                urls:
+                    - "http://localhost:8092"
+endpoints:
+    env:
+        enabled: true
+        sensitive: false
+    loggers:
+        enabled: true
+        sensitive: false
+    beans:
+        enabled: true
+        sensitive: false
+    info:
+        enabled: true
+        sensitive: false
+    routes:
+        enabled: true
+        sensitive: false
+#        details-visible: ANONYMOUS
+    health:
+        enabled: true
+        sensitive: false
+        details-visible: ANONYMOUS
+#    metrics:
+#        enabled: true
+#        sensitive: false
+jackson:
+    module-scan: true
+    bean-introspection-module: true
+    time-zone: Europe/Berlin
+consul:
+    client:
+        registration:
+            enabled: true
+        defaultZone: "${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}"
+tracing:
+    jaeger:
+        enabled: true
+        sampler:
+            propability: 1
+        sender:
+            agent-port: 6831
+#            manager-host-port: 14268
+#        sender:
+#            agent-port: 5778
+#            endpoint:

@@ -1,0 +1,6 @@
+micronaut:
+    server:
+        port: -1
+#tracing:
+#    jaeger:
+#        enabled: false
