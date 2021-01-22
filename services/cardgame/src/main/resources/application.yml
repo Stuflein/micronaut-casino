@@ -1,3 +1,158 @@
 micronaut:
-  application:
-    name: cardgame
+    io:
+        watch:
+            paths: src/main
+            enabled: true
+    application:
+        name: cardgame-casino
+    server:
+        host: localhost
+        port: 8092
+        cors:
+            enabled: true
+            configurations:
+                web:
+                    allowedOrigins:
+                        - http://localhost:4040
+                    exposedHeaders:
+                        - Content-Type
+                        - Authorization
+                        - Date
+        multipart:
+            enabled: true
+        log-handled-exceptions: true
+    security:
+        authentication: bearer
+        token:
+            jwt:
+                signatures:
+                    secret:
+                        generator:
+                            secret: 'MeinGeheimnisbleitGeheimMeinGeheMeinGeheimnisbleitGeheimMeinGehe'
+                            jws-algorithm: HS256
+                            base64: true
+                        validation:
+                            secret: 'MeinGeheimnisbleitGeheimMeinGeheMeinGeheimnisbleitGeheimMeinGehe'
+
+#                generator:
+#                    refresh-token:
+#                        secret: 'MeinGeheimnisbleitGeheimMeinGeheMeinGeheimnisbleitGeheimMeinGehe'
+#                        enabled: true
+#                        base64: true
+#                        jws-algorithm: HS256
+            propagation:
+                header:
+                    enabled: true
+                    header-name: "Authorization"
+                    prefix: "Bearer "
+                enabled: true
+                service-id-regex: "account-casino|gateway-casino"
+        endpoints:
+            login:
+                enabled: false
+        http:
+            services:
+                gateway-casino:
+                    urls:
+                        - "http://localhost:4040"
+                account-casino:
+                    urls:
+                        - 'http://localhost:8091'
+    caches:
+      discovery-client:
+          enabled: false
+#    caches:
+#        cardgames:
+#            charset: UTF-8
+#        cards-played:
+#            charset: UTF-8
+endpoints:
+    env:
+        enabled: true
+        sensitive: false
+    loggers:
+        enabled: true
+        sensitive: false
+    beans:
+        enabled: true
+        sensitive: false
+    info:
+        enabled: true
+        sensitive: false
+    routes:
+        enabled: true
+        sensitive: false
+#        details-visible: ANONYMOUS
+    health:
+        enabled: true
+#        discovery-client:
+#            enabled: true TODO: check
+        sensitive: false
+        details-visible: ANONYMOUS
+jackson:
+    module-scan: true
+    bean-introspection-module: true
+    locale: de_DE
+    time-zone: Europe/Berlin
+consul:
+    client:
+        registration:
+            enabled: true
+#            fail-fast: false
+        defaultZone: "${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}"
+#        config:
+#            enabled: false
+tracing:
+    jaeger:
+        enabled: true
+        sampler:
+            propability: 1
+        sender:
+            agent-port: 6831
+#grails:
+#    mongodb:
+#        databaseName: cardgame_db
+redis:
+    uri: redis://127.0.0.1:6379
+mongodb:
+    connection-pool:
+        max-size: 5
+    servers:
+        decks:
+            uri: "mongodb://${MONGO_INITDB_ROOT_USERNAME:root}:${MONGO_INITDB_ROOT_PASSWORD:dev}@${MONGO_HOST:localhost}:${MONGO_PORT:27017}/${MONGO_INITDB_DATABASE:cardgameDB}?authSource=admin"
+            automatic-class-models: true
+            uuid-representation: java_legacy
+            package-names:
+                - casino.cardgame.domain
+            retry-writes: false
+            retry-reads: false
+        game:
+            uri: "mongodb://${MONGO_INITDB_ROOT_USERNAME:root}:${MONGO_INITDB_ROOT_PASSWORD:dev}@${MONGO_HOST:localhost}:${MONGO_PORT:27017}/${MONGO_INITDB_DATABASE:cardgameDB}?authSource=admin"
+            automatic-class-models: true
+            uuid-representation: java_legacy
+            retry-writes: false
+            package-names:
+                - casino.cardgame.domain
+            retry-reads: false
+            write-concern: w1
+
+#    uri: "mongodb://${MONGO_INITDB_ROOT_USERNAME:root}:${MONGO_INITDB_ROOT_PASSWORD:dev}@${MONGO_HOST:localhost}:${MONGO_PORT:27017}/${MONGO_INITDB_DATABASE:cardgameDB}?authSource=admin"
+#    package-names:
+#        - casino.cardgame.domain
+#    database: cardgame_db
+#    username: root
+#    password: dev
+#    authentication-database: admin
+#    cluster:
+#        maxWaitQueueSize: 5
+#    connectionPool:
+#        maxSize: 20
+#    servers:
+#        cards:
+#            uri: mongodb://${MONGO_INITDB_ROOT_USERNAME:root}:${MONGO_INITDB_ROOT_PASSWORD:dev}@${MONGO_HOST:localhost}:${MONGO_PORT:27017}/${MONGO_INITDB_DATABASE:cardgame_db}?authSource=admin
+#    application-name: cardgame-casino
+#    automatic-class-models: true
+#    uuid-representation: java_legacy
+#    retry-writes: false
+#    retry-reads: true
+#    codec-registry: ProvidersCodecRegistry

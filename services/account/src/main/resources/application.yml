@@ -1,6 +1,10 @@
 micronaut:
+    io:
+        watch:
+            paths: src/main
+            enabled: true
     application:
-        name: account
+        name: account-casino
     server:
         host: localhost
         port: 8091
@@ -9,10 +13,103 @@ micronaut:
             configurations:
                 web:
                     allowedOrigins:
-                        - http://localhost:3306
-        multipart:
-            enabled: false
+                        - http://localhost:4040
+                    exposedHeaders:
+                        - Content-Type
+                        - Authorization
+                        - Date
+#        multipart:
+#            enabled: true --> for uploading pictures etc or sending them in http
         log-handled-exceptions: true
+#    router:
+#        static-resources:
+#            default:
+#                paths: "classpath:static"
+#                mapping: "/**" # maps root path to static resource -> localhost/stat.jpg
+    security:
+        authentication: bearer
+        token:
+            jwt:
+                signatures:
+                    secret:
+                        generator:
+                            secret: 'MeinGeheimnisbleitGeheimMeinGeheMeinGeheimnisbleitGeheimMeinGehe'
+                            jws-algorithm: HS256
+                            base64: true
+                        validation:
+                            secret: 'MeinGeheimnisbleitGeheimMeinGeheMeinGeheimnisbleitGeheimMeinGehe'
+
+#                generator:
+#                    refresh-token:
+#                        secret: 'MeinGeheimnisbleitGeheimMeinGeheMeinGeheimnisbleitGeheimMeinGehe'
+#                        enabled: true
+#                        base64: true
+#                        jws-algorithm: HS256
+            #                encryptions:
+#                    secret:
+#                        generator:
+#                            secret: 'EncryptionSecretIsSecretlySecretEncryptionSecretIsSecretlySecret'
+#                            jwe-algorithm: A128KW
+#                            encryption-method: A128CBC_HS256  #TODO: nicht dass es hieran scheitert
+            propagation:
+                header:
+                    enabled: true
+                    header-name: "Authorization"
+                    prefix: "Bearer "
+                enabled: true
+                service-id-regex: "gateway-casino|cardgame-casino"
+        endpoints:
+            login:
+                enabled: false #CustomLoginController
+            oauth:
+                enabled: true
+                path: '/oauth/access_token'
+                get-allowed: true
+        #                enabled: true
+#                path: '/oauth/access_token'
+
+        redirect:
+#        endpoints:
+#            login:
+#                path:
+#            login-success: http://localhost:8092
+        http:
+            services:
+                gateway-casino:
+                    urls:
+                        - "http://localhost:4040"
+                cardgame-casino:
+                    urls:
+                        - "http://localhost:8092"
+#    caches:
+#        users:
+#            charset: 'UTF-8'
+
+endpoints:
+    env:
+        enabled: true
+        sensitive: false
+    loggers:
+        enabled: true
+        sensitive: false
+    beans:
+        enabled: true
+        sensitive: false
+    info:
+        enabled: true
+        sensitive: false
+    routes:
+        enabled: true
+        sensitive: false #damit kein auth check
+#        details-visible: ANONYMOUS
+    health:
+        enabled: true
+        sensitive: false #damit kein auth check
+        details-visible: ANONYMOUS
+    metrics:
+        enabled: true
+        sensitive: false
+
 
 jackson:
     module-scan: true
@@ -28,4 +125,17 @@ vertx:
             user: root
             password: dev
             max-size: 5
+consul:
+    client:
+        registration:
+            enabled: true
+#            fail-fast: false
+        defaultZone: "${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}"
+tracing:
+    jaeger:
+        enabled: true
+        sampler:
+            propability: 1
+        sender:
+            agent-port: 6831
 

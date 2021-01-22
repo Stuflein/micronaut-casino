@@ -1,0 +1,91 @@
+plugins {
+    id 'java'
+    id "application"
+    id "com.github.johnrengelman.shadow" version "5.2.0"
+    id "net.ltgt.apt-eclipse" version "0.21"
+    id 'idea'
+    id "io.spring.dependency-management" version "1.0.10.RELEASE"
+}
+
+group 'casino'
+version '0.1'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    jcenter()
+    maven { url "https://plugins.gradle.org/m2/" }
+    maven { url "https://jcenter.bintray.com" }
+    maven { url 'https://jitpack.io' }
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+}
+
+configurations {
+    // for dependencies that are needed for development only
+    developmentOnly
+}
+
+dependencies {
+    implementation project(":api")
+
+    //Micronaut
+    annotationProcessor platform("io.micronaut:micronaut-bom:$micronautVersion")
+    annotationProcessor "io.micronaut:micronaut-inject-java"
+    annotationProcessor "io.micronaut:micronaut-validation"
+    implementation platform("io.micronaut:micronaut-bom:$micronautVersion")
+    implementation "io.micronaut:micronaut-inject"
+    implementation "io.micronaut:micronaut-validation"
+    //MicrRunt for mac
+    implementation "io.micronaut:micronaut-runtime-osx"
+    implementation "javax.annotation:javax.annotation-api"
+    implementation "io.micronaut:micronaut-http-server-netty"
+    implementation "io.micronaut:micronaut-http-client"
+//    implementation("io.micronaut:micronaut-runtime")
+    //security
+    implementation("io.micronaut.security:micronaut-security-annotations")
+    // compileOnly("io.micronaut.security:micronaut-security-annotations")
+    annotationProcessor "io.micronaut.security:micronaut-security-annotations"
+    implementation "io.micronaut.security:micronaut-security-jwt"
+
+    implementation "io.micronaut:micronaut-function-client"
+    //service discovery
+    runtimeOnly "io.micronaut:micronaut-discovery-client"
+
+    //Call-Tracing--Jaeger
+    implementation("io.micronaut:micronaut-tracing")
+    runtimeOnly("io.jaegertracing:jaeger-thrift")
+    implementation("io.jaegertracing:jaeger-thrift")
+
+    //fasterXml
+    implementation group: 'com.fasterxml.jackson', name: 'jackson-bom', version: '2.10.3', ext: 'pom'
+
+    runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
+    implementation "ch.qos.logback:logback-classic:1.2.3"
+
+
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
+}
+
+test.classpath += configurations.developmentOnly
+
+mainClassName = "casino.gateway.Application"
+// use JUnit 5 platform
+test {
+    useJUnitPlatform()
+}
+
+
+shadowJar {
+    mergeServiceFiles()
+}
+
+tasks.withType(JavaExec) {
+    classpath += configurations.developmentOnly
+    jvmArgs('-noverify', '-XX:TieredStopAtLevel=1', '-Dcom.sun.management.jmxremote')
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+    options.compilerArgs.add('-parameters')
+    options.compilerArgs.add('-Xlint:unchecked')
+}
