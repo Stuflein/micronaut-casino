@@ -12,7 +12,6 @@ services:
         ports:
             - "3306:3306"
         volumes:
-            - ./db/db.mySqlDB.sql:/docker-entrypoint-initdb.d/mySqlDB.sql
             - ./db/db.mySqlDB-volume:/var/lib/mysql
     mongodb:
         image: mongo:latest
