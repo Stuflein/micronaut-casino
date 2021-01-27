@@ -1,6 +1,18 @@
 version: "3"
 
 services:
+    postgres:
+        container_name: postgres-db
+        image: library/postgres:latest
+        restart: always
+        environment:
+            POSTGRES_USER: root
+            POSTGRES_PASSWORD: dev
+            POSTGRES_DB: postgres
+        ports:
+            -  "5432:5432"
+        volumes:
+            - ./db/db.postgres-volume:/var/lib/postgresql/data
     mysql:
         container_name: mysql-db
         image: library/mysql:8.0
@@ -12,6 +24,7 @@ services:
         ports:
             - "3306:3306"
         volumes:
+            - ./db/db.mySqlDB.sql:/docker-entrypoint-initdb.d/mySqlDB.sql
             - ./db/db.mySqlDB-volume:/var/lib/mysql
     mongodb:
         image: mongo:latest
@@ -63,61 +76,7 @@ services:
             - 16686:16686
             - 14268:14268
             - 9411:9411
-#    jaeger-collector:
-#        container_name: casino-jaeger-collector
-#        image: jaegertracing/jaeger-collector:latest
-#        command: [ "--cassandra.keyspace=jaeger_v1_dc1", "--cassandra.servers=cassandra", "--collector.zipkin.http-port=9411" ]
-#        ports:
-#            - "14269:14269"
-#            - "14268:14268"
-#            - "14267:14267"
-#            - "9411:9411"
-#            - "14250:14250"
-#        restart: on-failure
-#        depends_on:
-#            - cassandra-schema
-#        environment:
-#            - LOG_LEVEL=debug
-#            - SPAN_STORAGE_TYPE=cassandra
-#
-#    jaeger-query:
-#        container_name: casino-jaeger-query
-#        image: jaegertracing/jaeger-query:latest
-#        command: [ "--cassandra.keyspace=jaeger_v1_dc1", "--cassandra.servers=cassandra" ]
-#        ports:
-#            - "16686:16686"
-#            - "16687:16687"
-#        restart: on-failure
-#        depends_on:
-#            - cassandra-schema
-#        environment:
-#            - LOG_LEVEL=debug
-#            - JAEGER_AGENT_HOST=jaeger-collector
-#            - JAEGER_AGENT_PORT=6831
-#
-#    jaeger-agent:
-#        container_name: casino-jaeger-agent
-#        image: jaegertracing/jaeger-agent:latest
-#        command: [ "--reporter.grpc.host-port=jaeger-collector:14250" ]
-#        ports:
-#            - "5775:5775/udp"
-#            - "6831:6831/udp"
-#            - "6832:6832/udp"
-#            - "5778:5778"
-#        restart: on-failure
-#        depends_on:
-#            - jaeger-collector
-#        environment:
-#            - LOG_LEVEL=debug
-#
-#    cassandra:
-#        container_name: casino-cassandra
-#        image: library/cassandra:latest
-#    cassandra-schema:
-#        container_name: casino-cassandra-schema
-#        image: jaegertracing/jaeger-cassandra-schema:latest
-#        depends_on:
-#            - cassandra
+
 
 
 

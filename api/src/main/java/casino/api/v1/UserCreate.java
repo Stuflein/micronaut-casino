@@ -1,11 +1,9 @@
 package casino.api.v1;
 
-import io.micronaut.core.annotation.Introspected;
-
 import java.io.Serializable;
 import java.util.Objects;
 
-//@Introspected
+
 public class UserCreate implements Serializable {
 
     private String username;
@@ -39,22 +37,6 @@ public class UserCreate implements Serializable {
     public long getCredit() {
         return credit;
     }
-
-//    public void setUsername(String username) {
-//        this.username = username;
-//    }
-
-//    public void setEmail(String email) {
-//        this.email = email;
-//    }
-//
-//    public void setPassword(String password) {
-//        this.password = password;
-//    }
-
-//    public void setCredit(long credit) {
-//        this.credit = credit;
-//    }
 
     @Override
     public boolean equals(Object o) {

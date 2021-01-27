@@ -32,9 +32,9 @@ public class CustomLoginController {
      * Custom implementation of LoginController
      * for UsernamePasswordCredentials in Body of Request
      *
-     * @param authenticator   Custom AuthenticationProvider for UsernamePasswordCredentials
-     * @param eventPublisher   Publish LoginResult
-     * @param loginHandler    Provided Loginhandler from Micronaut
+     *  authenticator   Custom AuthenticationProvider for UsernamePasswordCredentials
+     *  eventPublisher   Publish LoginResult
+     *  loginHandler    Provided Loginhandler from Micronaut
      */
 
 
@@ -61,7 +61,7 @@ public class CustomLoginController {
         return responseFlowable.map(authResp -> {
             if (authResp.isAuthenticated() && authResp.getUserDetails().isPresent()) {
                 CasinoUserDetails details = (CasinoUserDetails) authResp.getUserDetails().get();
-                logger.info("CustomLoginController:      LoginSuccessful for User:   " + details.getUsername());
+                logger.info("CustomLoginController:      LoginSuccessful for User:   {}" , details.getUsername());
                 eventPublisher.publishEvent(new LoginSuccessfulEvent(details));
                 return loginHandler.loginSuccess(details, request);
             } else {

@@ -1,25 +1,22 @@
 package casino.api.v1;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-
 public enum CardColor {
     DIAMONDS("DIAMONDS"), HEARTS("HEARTS"), SPADES("SPADES"), CLUBS("CLUBS");
 
-    private final String cardColor;
+    private final String color;
 
     CardColor(String color) {
-        this.cardColor = color;
+        this.color = color;
     }
 
-    //        @JsonValue
+
     public String getCardColor() {
-        return cardColor;
+        return color;
     }
 
     @Override
     public String toString() {
-        return this.cardColor;
+        return this.color;
     }
 }
 

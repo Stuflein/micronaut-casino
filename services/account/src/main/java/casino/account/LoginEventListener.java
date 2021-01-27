@@ -35,17 +35,17 @@ public class LoginEventListener {
 
     @EventListener
     public void onLoginEvent(LoginSuccessfulEvent event) {
-        logger.info("LoginEventListener triggered:    eventSource:  " + event.getSource().toString() + "   event:  " + event.toString() + "  at:  " + LocalDateTime.now());
+        logger.info("LoginEventListener triggered:    eventSource:   {}     event:   {}    at:    {}", event.getSource(), event, LocalDateTime.now());
         UUID userId = ((CasinoUserDetails) event.getSource()).getUserId();
-        logger.info("LoginEventListener:  userId:   " + userId);
+        logger.info("LoginEventListener:  userId:   {}", userId);
         long epochSeconds = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
-        accountDao.setLastLogin(userId, epochSeconds).map(success -> {
-            if (!success) {
-                logger.error("LoginEventListener:   LastLogin for UserId:  " + userId + "on epochSeconds: " + epochSeconds + " not updated");
-                throw new LastLoginNotUpdatedException("LastLogin for UserId:  " + userId + "on epochSeconds: " + epochSeconds + " not updated");
-            } else {
-                logger.info("LoginEventListener:   LastLogin for UserId:  " + userId + "on epochSeconds: " + epochSeconds + " IS updated");
+        accountDao.setLastLogin(userId, epochSeconds).map((Boolean success) -> {
+            if (Boolean.TRUE.equals(success)) {
+                logger.info("LoginEventListener:   LastLogin for UserId:  {}    on epochSeconds:   {}   IS updated", userId, epochSeconds);
                 return true;
+            } else {
+                logger.error("LoginEventListener:   LastLogin for UserId:  {}   on epochSeconds: {} not updated", userId, epochSeconds);
+                throw new LastLoginNotUpdatedException("LastLogin for UserId:  " + userId + "on epochSeconds: " + epochSeconds + " not updated");
             }
         }).subscribe();
     }

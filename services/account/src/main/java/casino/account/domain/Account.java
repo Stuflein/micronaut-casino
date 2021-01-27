@@ -23,8 +23,8 @@ public class Account implements Serializable {
     private final boolean accountExpired;
     private final boolean accountLocked;
     private final boolean passwordExpired;
-    private final long last_login;
-    private final long created_at;
+    private final long lastLogin;
+    private final long createdAt;
     private final List<UserRole> role;
 
 
@@ -32,8 +32,8 @@ public class Account implements Serializable {
                    String email, long credit,
                    @Nullable String password, boolean enabled,
                    boolean accountExpired, boolean accountLocked,
-                   boolean passwordExpired, long last_login,
-                   long created_at, UserRole role) {
+                   boolean passwordExpired, long lastLogin,
+                   long createdAt, UserRole role) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -43,9 +43,9 @@ public class Account implements Serializable {
         this.accountExpired = accountExpired;
         this.accountLocked = accountLocked;
         this.passwordExpired = passwordExpired;
-        this.last_login = last_login;
-        this.created_at = created_at;
-        this.role = new ArrayList<UserRole>(Collections.singleton(role));
+        this.lastLogin = lastLogin;
+        this.createdAt = createdAt;
+        this.role = new ArrayList<>(Collections.singleton(role));
     }
 
     public UUID getId() {
@@ -93,12 +93,12 @@ public class Account implements Serializable {
         return passwordExpired;
     }
 
-    public long getLast_login() {
-        return last_login;
+    public long getLastLogin() {
+        return lastLogin;
     }
 
-    public long getCreated_at() {
-        return created_at;
+    public long getCreatedAt() {
+        return createdAt;
     }
 
     public UserRole getRole() {

@@ -1,8 +1,6 @@
 plugins {
-//    id 'java'
     id "com.github.johnrengelman.shadow" version "5.2.0"
     id 'groovy'
-    id "net.ltgt.apt-eclipse" version "0.21"
     id 'idea'
     id "io.spring.dependency-management" version "1.0.10.RELEASE"
     id "application"
@@ -10,7 +8,6 @@ plugins {
 
 group 'casino'
 version '0.1'
-
 
 repositories {
     mavenLocal()
@@ -29,13 +26,14 @@ configurations {
 
 dependencies {
     implementation project(":api")
-
     annotationProcessor platform("io.micronaut:micronaut-bom:$micronautVersion")
     annotationProcessor "io.micronaut:micronaut-inject-java"
     annotationProcessor "io.micronaut:micronaut-validation"
     implementation platform("io.micronaut:micronaut-bom:$micronautVersion")
     implementation "io.micronaut:micronaut-inject"
     implementation "io.micronaut:micronaut-validation"
+    //MicrRunt for mac
+    implementation "io.micronaut:micronaut-runtime-osx"
     implementation "javax.annotation:javax.annotation-api"
     implementation "io.micronaut:micronaut-http-server-netty"
     implementation "io.micronaut:micronaut-http-client"
@@ -43,37 +41,27 @@ dependencies {
     runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
     implementation "ch.qos.logback:logback-classic:1.2.3"
 
-    //MicrRunt for mac
-    implementation "io.micronaut:micronaut-runtime-osx"
-
-    //fasterXml
-    implementation group: 'com.fasterxml.jackson', name: 'jackson-bom', version: '2.10.3', ext: 'pom'
-
-
     //SECURITY
     implementation 'io.micronaut.security:micronaut-security-oauth2:2.2.0'
     implementation("io.micronaut.security:micronaut-security-annotations")
     annotationProcessor "io.micronaut.security:micronaut-security-annotations"
     implementation "io.micronaut.security:micronaut-security-jwt"
 
-
-    //pw-coder
-    implementation "org.springframework.security:spring-security-crypto:5.4.2"
-    implementation "org.springframework.security:spring-security-core:5.4.1"
-
-    //Call-Tracing--Jaeger
-    implementation("io.micronaut:micronaut-tracing")
-    implementation("io.jaegertracing:jaeger-thrift")
-    runtimeOnly("io.jaegertracing:jaeger-thrift")
-
-    //DB
-    implementation("io.micronaut.sql:micronaut-vertx-mysql-client")
-    runtimeOnly 'mysql:mysql-connector-java:8.0.15'
+    //Micronaut data
+    runtimeOnly("org.postgresql:postgresql")
+    compile group: 'org.postgresql', name: 'postgresql', version: '42.2.18'
+    implementation("io.micronaut.sql:micronaut-jdbc-hikari")
+    implementation("io.micronaut.sql:micronaut-vertx-pg-client")
+    annotationProcessor("io.micronaut.data:micronaut-data-processor:2.2.4")
+    implementation("io.micronaut.data:micronaut-data-jdbc")
+    implementation 'io.micronaut.data:micronaut-data-model:2.2.4'
+    //flyway
+    implementation("io.micronaut.flyway:micronaut-flyway")
 
     //service discovery
     runtimeOnly "io.micronaut:micronaut-discovery-client"
 
-//    MicronautTest SPock
+    //    MicronautTest SPock
     testAnnotationProcessor platform("io.micronaut:micronaut-bom:$micronautVersion")
     testImplementation platform("io.micronaut:micronaut-bom:$micronautVersion")
     testImplementation("org.spockframework:spock-core") {
@@ -83,14 +71,12 @@ dependencies {
     testImplementation "io.micronaut.test:micronaut-test-spock"
     testImplementation "io.micronaut.test:micronaut-test-junit5"
 
-
-
 }
 
 test.classpath += configurations.developmentOnly
 
-mainClassName = "casino.account.Application"
-// use JUnit 5 platform
+mainClassName = "casino.data.Application"
+
 test {
     useJUnitPlatform()
 }
@@ -109,6 +95,3 @@ tasks.withType(JavaCompile) {
     options.compilerArgs.add('-parameters')
     options.compilerArgs.add('-Xlint:unchecked')
 }
-
-
-

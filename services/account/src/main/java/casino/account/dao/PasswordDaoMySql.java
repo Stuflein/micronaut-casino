@@ -18,7 +18,7 @@ import java.util.UUID;
 public class PasswordDaoMySql implements PasswordDao {
     /**
      * Class for simple CRUD operations in password Database
-     * @param client  vertx.reactivex MySQLPool
+     *  client  vertx.reactivex MySQLPool
      *
      * */
 
@@ -29,14 +29,14 @@ public class PasswordDaoMySql implements PasswordDao {
 
     @Override
     public Single<Boolean> addPassword(@NotNull UUID id, @NotNull String password) {
-        logger.info("PasswordDaoMySql:  addPassword() for id:  " + id);
+        logger.info("PasswordDaoMySql:  addPassword() for id:    {}" , id);
         String sql = "INSERT INTO security (id, password) VALUES (?, ?)";
         return client.preparedQuery(sql).rxExecute(Tuple.of(id.toString(), password)).map(a -> a.rowCount() == 1);
     }
 
     @Override
     public Single<String> getPassword(UUID id) {
-        logger.info("PasswordDaoMySql:  getPassword() for id:  " + id);
+        logger.info("PasswordDaoMySql:  getPassword() for id:  {}" , id);
         String sql = "SELECT password FROM security WHERE id = ?";
         return client.preparedQuery(sql).rxExecute(Tuple.of(id)).map(rows -> {
             RowIterator<Row> ite = rows.iterator();
@@ -50,13 +50,13 @@ public class PasswordDaoMySql implements PasswordDao {
 
     @Override
     public Single<Boolean> setPassword(UUID id, String password) {
-        logger.info("PasswordDaoMySql:  setPassword()  for account:  " + id);
+        logger.info("PasswordDaoMySql:  setPassword()  for account:  {}" , id);
         return null;
     }//TODO:setPassword
 
     @Override
     public Single<Boolean> deletePassword(UUID id) {
-        logger.info("PasswordDaoMySql:  deletePassword() for id:   " + id);
+        logger.info("PasswordDaoMySql:  deletePassword() for id:   {}" , id);
         String sql = "DELETE FROM security WHERE id = ?";
         return client.preparedQuery(sql).rxExecute(Tuple.of(id.toString())).map(rowSet -> rowSet.rowCount() == 1);
     }

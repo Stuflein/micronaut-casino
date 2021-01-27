@@ -15,7 +15,6 @@ import io.reactivex.Single;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.UUID;
 
@@ -38,7 +37,7 @@ public class AccountGateway implements Operations<User, UserCreate> {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Single<User> create(@SpanTag("account.create.id") @Body UserCreate createEntity) {
-        logger.info("AccountGateway: create account for username:  " + createEntity.getUsername());
+        logger.info("AccountGateway: create account for username:   {}" , createEntity.getUsername());
         return client.create(createEntity);
     }
 
@@ -49,14 +48,9 @@ public class AccountGateway implements Operations<User, UserCreate> {
 //    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Single<User> get(@SpanTag("account.get.id") @PathVariable UUID id) {
-        logger.info("AccountGateway: get account:  " + id);
+        logger.info("AccountGateway: get account:   {}" , id);
         return client.get(id);
     }
-
-//    @Override
-//    public Single<User> get(UUID id) {
-//        return null;
-//    }
 
     @Override
     @Put("/{id}")
@@ -65,7 +59,7 @@ public class AccountGateway implements Operations<User, UserCreate> {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Single<User> update(@SpanTag("account.update.body") @PathVariable UUID id, @Body User updateEntity) {
-        logger.info("AccountGateway: update account:   " + id );
+        logger.info("AccountGateway: update account:   {}" , id );
         return client.update(id, updateEntity);
     }
 
@@ -75,7 +69,7 @@ public class AccountGateway implements Operations<User, UserCreate> {
     @Secured(SecurityRule.IS_AUTHENTICATED)
 //    @Produces(MediaType.TEXT_PLAIN)
     public Single<HttpStatus> delete(@SpanTag("account.delete.id") @PathVariable UUID id) {
-        logger.info("AccountGateway: delete account:  " + id);
+        logger.info("AccountGateway: delete account:   {}" , id);
         return client.delete(id);
     }
 }

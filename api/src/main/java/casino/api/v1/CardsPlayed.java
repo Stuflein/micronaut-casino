@@ -5,8 +5,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import java.io.Serializable;
 
 public class CardsPlayed implements Serializable {
-//TODO: draw pile in handsplayed
-    //TODO: int restcards in piles
+
     private long roundNumber;
     private int handPlayedInRoundNumber;
     private Result result;

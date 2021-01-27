@@ -9,16 +9,6 @@ micronaut:
         host: localhost
         port: 4040
         cors:
-#            enabled: true
-#            configurations:
-#                web:
-#                    allowedOrigins:
-#                        - http://localhost:8091
-#                    exposedHeaders:
-#                        - Content-Type
-#                        - Authorization
-#                        - Date
-
         multipart:
             enabled: true
         log-handled-exceptions: true
@@ -39,12 +29,6 @@ micronaut:
                             base64: true
                         validation:
                             secret: 'MeinGeheimnisbleitGeheimMeinGeheMeinGeheimnisbleitGeheimMeinGehe'
-#                generator:
-#                    refresh-token:
-#                        secret: 'MeinGeheimnisbleitGeheimMeinGeheimnisbleitGeheimMeinGeheimnisbleitGeheimMeinGeheimnisbleitGeheim'
-#                        enabled: true
-#                        base64: true
-#                        jws-algorithm: HS256
             propagation:
                 enabled: true
                 header:
@@ -52,7 +36,6 @@ micronaut:
                     header-name: "Authorization"
                     prefix: "Bearer "
                 service-id-regex: "account-casino|cardgame-casino"
-#                uri-regex: "http://localhost:(8091|8092)"
     http:
         services:
             account-casino:
@@ -82,9 +65,6 @@ endpoints:
         enabled: true
         sensitive: false
         details-visible: ANONYMOUS
-#    metrics:
-#        enabled: true
-#        sensitive: false
 jackson:
     module-scan: true
     bean-introspection-module: true
@@ -101,7 +81,3 @@ tracing:
             propability: 1
         sender:
             agent-port: 6831
-#            manager-host-port: 14268
-#        sender:
-#            agent-port: 5778
-#            endpoint:

@@ -14,11 +14,6 @@ public class UserLogin implements Serializable {
 
     private String password;
 
-//    public UserLogin(String username, String password) {
-//        this.username = username;
-//        this.password = password;
-//    }
-
 
     public UserLogin(String username, String password) {
         this.username = username;

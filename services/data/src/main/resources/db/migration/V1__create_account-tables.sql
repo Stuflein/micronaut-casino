@@ -16,8 +16,3 @@ CREATE TABLE IF NOT EXISTS account
     guest            BOOLEAN,
     admin            BOOLEAN DEFAULT false
 );
-
-
-
-INSERT INTO account (id, username, email, credit, player, guest)
-VALUES ('bd301596-7ebc-4581-b02d-40194c6099c6', 'test', 'test', 12, true, false);
