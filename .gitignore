@@ -18,3 +18,4 @@ out/
 /db/db.mySqlDB-volume
 /db/db.redis
 /db/db.postgres-volume
+/services/account/features/

@@ -65,22 +65,13 @@ dependencies {
     implementation group: 'com.fasterxml.jackson', name: 'jackson-bom', version: '2.10.3', ext: 'pom'
 
 
-
-    runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
-    testAnnotationProcessor platform("io.micronaut:micronaut-bom:$micronautVersion")
-    testAnnotationProcessor "io.micronaut:micronaut-inject-java"
-    testImplementation platform("io.micronaut:micronaut-bom:$micronautVersion")
-
-
-
-
-
     //MongoDB  micronaut
     implementation("io.micronaut.mongodb:micronaut-mongo-reactive")
 
-
+    runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
 
     //TEST
+    testAnnotationProcessor "io.micronaut:micronaut-inject-java"
     testAnnotationProcessor platform("io.micronaut:micronaut-bom:$micronautVersion")
     testImplementation platform("io.micronaut:micronaut-bom:$micronautVersion")
     testImplementation("org.spockframework:spock-core") {
