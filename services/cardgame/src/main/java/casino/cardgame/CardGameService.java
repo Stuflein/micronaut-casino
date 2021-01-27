@@ -1,6 +1,7 @@
 package casino.cardgame;
 
 import casino.api.v1.CardGame;
+import casino.api.v1.GameCreate;
 import casino.cardgame.domain.MongoCardGame;
 import io.reactivex.Single;
 
@@ -12,5 +13,5 @@ public interface CardGameService {
 
     Single<Boolean> wagerToAccountCredit(UUID accountId, long wager);
 
-    Single<MongoCardGame> startGame(UUID accountId, long wager);
+    Single<MongoCardGame> startGame(GameCreate gameCreate);
 }

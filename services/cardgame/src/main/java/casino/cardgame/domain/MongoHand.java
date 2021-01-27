@@ -29,9 +29,6 @@ public class MongoHand implements Serializable {
     @BsonProperty("bot_card_played")
     @JsonProperty("bot_card_played")
     private String botCardPlayed;
-    //    @BsonProperty("decks_after_hand")
-//    @JsonProperty("decks_after_hand")
-//    private MongoDecks decksAfterHand;
     @BsonProperty("hand_id")
     private UUID handId;
 
@@ -41,7 +38,6 @@ public class MongoHand implements Serializable {
         this.result = result;
         this.playerCardPlayed = playerCardPlayed.toString();
         this.botCardPlayed = botCardPlayed.toString();
-//        this.decksAfterHand = MongoDecks.getMongoFromDecks(decksAfterHand);
         this.handId = handId;
     }
 

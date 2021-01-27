@@ -11,13 +11,11 @@
     </appender>
 
     <logger name="io.micronaut.runtime" level="DEBUG"/>
-<!--    <logger name="io.micronaut.context.condition" level="INFO"/>-->
-<!--    <logger name="io.jaegertracing:jaeger-thrift" level="DEBUG"/>-->
-<!--    <logger name="io.micronaut.tracing" level="DEBUG"/>-->
-<!--    <logger name="io.micronaut.http.client" level="DEBUG"/>-->
+    <logger name="io.micronaut.context.condition" level="DEBUG"/>
+    <logger name="io.jaegertracing:jaeger-thrift" level="DEBUG"/>
+    <logger name="io.micronaut.tracing" level="DEBUG"/>
+    <logger name="io.micronaut.http.client" level="DEBUG"/>
     <logger name="io.micronaut.flyway" level="TRACE"/>
-<!--    <logger name="io.micronaut.discovery" level="TRACE"/>-->
-<!--    <logger name="casino.data" level="TRACE"/>-->
 
     <root level="WARN">
         <appender-ref ref="STDOUT"/>

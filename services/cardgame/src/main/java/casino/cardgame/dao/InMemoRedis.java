@@ -1,7 +1,6 @@
 package casino.cardgame.dao;
 
 import casino.api.v1.Result;
-import casino.cardgame.dao.InMemo;
 import casino.cardgame.domain.MongoCardGame;
 import casino.cardgame.domain.MongoDecks;
 import casino.cardgame.domain.MongoHand;
@@ -26,10 +25,11 @@ public class InMemoRedis implements InMemo {
         this.client = client.connect().async();
     }//TODO: reactice instead of async
 
+
     @Override
     public Single<MongoCardGame> getGame(UUID gameId) {
         String roundsKey = String.format("game:%s:rounds", gameId.toString());
-        String gameKey = String.format("game:%s", gameId.toString());
+        String gameKey = getGameKey(gameId);
         Map<String, String> gameMap = client.hgetall(gameKey).toCompletableFuture().join();
         if (gameMap.isEmpty())
             throw ExceptionFactory.createExecutionException("Game:  " + gameId + "    error fetching from Redis ->  gameMap is empty");
@@ -45,12 +45,11 @@ public class InMemoRedis implements InMemo {
 
     @Override
     public Single<Boolean> saveEndOfGame(UUID gameId, boolean playerWin) {
-        String gameKey = String.format("game:%s", gameId.toString());
+        String gameKey = getGameKey(gameId);
         Map<String, String> gameMap = new HashMap<>();
         gameMap.put("playerWin", String.valueOf(playerWin));
         gameMap.put("isFinished", String.valueOf(true));
         long gameResult = client.hset(gameKey, gameMap).toCompletableFuture().join();
-//       if (gameResult != 2) throw ExceptionFactory.createExecutionException("Unable to save end of game:   " + gameKey);
         return Single.just(gameResult == 2L);
     }
 
@@ -62,7 +61,8 @@ public class InMemoRedis implements InMemo {
     @Override
     public Single<MongoCardGame> save(MongoCardGame game) {
         String userKey = String.format("user:%s", game.getUser().toString());
-        String gameKey = String.format("game:%s", game.getGameId().toString());
+        String gameKey = getGameKey(game.getGameId()) ;
+
         long gameInUserSet = client.sadd(userKey, gameKey).toCompletableFuture().join();
         long gameAsHashString = client.hset(gameKey, convertGameToMap(game)).toCompletableFuture().join();
         if (gameInUserSet != 1) {
@@ -150,5 +150,7 @@ public class InMemoRedis implements InMemo {
                 Result.valueOf(mapHand.get("result")), mapHand.get("playerCardPlayed"),
                 mapHand.get("botCardPlayed"), UUID.fromString(mapHand.get("id")));
     }
-
+    private String getGameKey(UUID gameId){
+        return String.format("game:%s", gameId.toString());
+    }
 }

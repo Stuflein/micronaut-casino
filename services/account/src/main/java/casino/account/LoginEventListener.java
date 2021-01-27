@@ -3,13 +3,11 @@ package casino.account;
 import casino.account.auth.CasinoUserDetails;
 import casino.account.dao.AccountDao;
 import casino.account.exceptions.LastLoginNotUpdatedException;
-import io.micronaut.context.event.ApplicationEventListener;
 import io.micronaut.runtime.event.annotation.EventListener;
 import io.micronaut.security.event.LoginSuccessfulEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;

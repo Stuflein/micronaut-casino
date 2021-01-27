@@ -19,7 +19,7 @@ import javax.inject.Singleton;
 import java.util.UUID;
 
 @Singleton
-//@Secured(SecurityRule.IS_ANONYMOUS)
+@Secured(SecurityRule.IS_ANONYMOUS)
 @Controller("api/user")
 public class AccountGateway implements Operations<User, UserCreate> {
 
@@ -44,8 +44,7 @@ public class AccountGateway implements Operations<User, UserCreate> {
     @Override
     @Get("/{id}")
     @NewSpan
-    @Secured(SecurityRule.IS_ANONYMOUS)
-//    @Consumes(MediaType.APPLICATION_JSON)
+    @Secured(SecurityRule.IS_AUTHENTICATED)
     @Produces(MediaType.APPLICATION_JSON)
     public Single<User> get(@SpanTag("account.get.id") @PathVariable UUID id) {
         logger.info("AccountGateway: get account:   {}" , id);
@@ -67,7 +66,6 @@ public class AccountGateway implements Operations<User, UserCreate> {
     @Delete("/{id}")
     @NewSpan
     @Secured(SecurityRule.IS_AUTHENTICATED)
-//    @Produces(MediaType.TEXT_PLAIN)
     public Single<HttpStatus> delete(@SpanTag("account.delete.id") @PathVariable UUID id) {
         logger.info("AccountGateway: delete account:   {}" , id);
         return client.delete(id);

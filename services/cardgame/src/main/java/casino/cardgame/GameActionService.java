@@ -19,20 +19,25 @@ public class GameActionService {
     private final InGameAction actionService;
     private final PersistenceService persistenceService;
     Logger logger = LoggerFactory.getLogger(GameActionService.class);
+    /**
+     * @param actionService InGameAction service for all things happening in Decks
+     * @param persistenceService PersistenceService service to save in memo and persist in MongoDB
+     *
+     * */
 
     public GameActionService(InGameAction actionService, PersistenceService persistenceService) {
         this.actionService = actionService;
         this.persistenceService = persistenceService;
     }
 
-    public Single<MongoCardGame> startGame(UUID playerId, long wager) {
-        logger.info("GameActionService: ");
+    public Single<MongoCardGame> startGame(UUID gameId, UUID playerId, long wager) {
+        logger.info("GameActionService: start game: {}   with player:  {}   for wager:   {}", gameId, playerId, wager);
         Decks decks = actionService.initCardGameDecks();
-        return persistenceService.saveGameStart(playerId, wager).flatMap(game -> playGame(game.getGameId(), decks));
+        return persistenceService.saveGameStart(gameId,playerId, wager).flatMap(game -> playGame(game.getGameId(), decks));
     }
 
     private Single<MongoCardGame> playGame(UUID gameId, Decks decks) {
-        logger.info("GameActionService: playGame:  " + gameId);
+        logger.info("GameActionService: playGame:  {}" , gameId);
         boolean isFinished = false;
         while (!isFinished) {
             actionService.checkAndShuffle(decks);
@@ -44,7 +49,7 @@ public class GameActionService {
     }
 
     private MongoHand playHand(Decks decks) {
-        logger.info("GameActionService: play hand number:  " + decks.getHandPlayedInRoundNumber() + "    in round:   " + decks.getRoundNumber());
+        logger.info("GameActionService: play hand number:    {}    in round:     {}", decks.getHandPlayedInRoundNumber() , decks.getRoundNumber());
         int handPlayed = decks.getHandPlayedInRoundNumber() + 1;
         decks.setHandPlayedInRoundNumber(handPlayed);
 

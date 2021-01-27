@@ -22,7 +22,7 @@ public class InGameActionImpl implements InGameAction {
 
     @Override
     public boolean checkIfGameOver(Decks decks) {
-        logger.info("InGameActionImpl:  checkIfGameOver  hands played:   " + decks.getHandPlayedInRoundNumber() + "   in round:   " + decks.getRoundNumber());
+        logger.info("InGameActionImpl:  checkIfGameOver  hands played:   {}     in round:    {} ", decks.getHandPlayedInRoundNumber(), decks.getRoundNumber());
         boolean bot = decks.getBotDiscardPile().iterator().hasNext() || decks.getBotDrawPile().iterator().hasNext();
         boolean player = decks.getPlayerDiscardPile().iterator().hasNext() || decks.getPlayerDrawPile().iterator().hasNext();
         return player && bot;
@@ -52,14 +52,14 @@ public class InGameActionImpl implements InGameAction {
 
     @Override
     public void checkAndShuffle(Decks decks) {
-        logger.info("InGameActionImpl:  checkAndShuffle hands played " + decks.getHandPlayedInRoundNumber() + "   in round:   " + decks.getRoundNumber());
-        if (decks.getPlayerDrawPile().size() < 1) {
+        logger.info("InGameActionImpl:  checkAndShuffle hands played   {}    in round:   {}", decks.getHandPlayedInRoundNumber(), decks.getRoundNumber());
+        if (decks.getPlayerDrawPile().isEmpty()) {
             long newRound = decks.getRoundNumber() + 1;
             decks.setRoundNumber(newRound);
             decks.setHandPlayedInRoundNumber(0);
             shuffle(true, decks);
         }
-        if (decks.getBotDrawPile().size() < 1) {
+        if (decks.getBotDrawPile().isEmpty()) {
             shuffle(false, decks);
         }
 
@@ -67,7 +67,7 @@ public class InGameActionImpl implements InGameAction {
 
     @Override
     public void shuffle(boolean playerShuffle, Decks decks) {
-        logger.info("InGameActionImpl:  shuffle()   hands played:  " + decks.getHandPlayedInRoundNumber() + "   in round:   " + decks.getRoundNumber() + "   playerShuffle:  " + playerShuffle);
+        logger.info("InGameActionImpl:  shuffle()   hands played:  {}   in round:   {}   playerShuffle:   {}",decks.getHandPlayedInRoundNumber() ,decks.getRoundNumber() ,  playerShuffle);
         if (playerShuffle) {
             List<Card> newDrawPile = new ArrayList<>(decks.getPlayerDiscardPile());
             Collections.shuffle(newDrawPile);
@@ -83,7 +83,7 @@ public class InGameActionImpl implements InGameAction {
 
     @Override
     public Result compareCardsForSwitch(Card player, Card bot) {
-        logger.info("InGameActionImpl:  compareCardsForSwitch   playerCard:  " + player + "    botCard:  " + bot);
+        logger.info("InGameActionImpl:  compareCardsForSwitch   playerCard:  {}    botCard:   {}",player ,  bot);
         if (player.compareTo(bot) < 0) {
             return Result.PLAYER_WIN;
         }
@@ -95,11 +95,11 @@ public class InGameActionImpl implements InGameAction {
 
     @Override
     public void checkIfEnoughRestCards(Decks decks) {
-        logger.info("InGameActionImpl:  checkIfEnoughRestCards hands played " + decks.getHandPlayedInRoundNumber() + "   in round:   " + decks.getRoundNumber());
+        logger.info("InGameActionImpl:  checkIfEnoughRestCards hands played   {}     in round:   {}", decks.getHandPlayedInRoundNumber() , decks.getRoundNumber());
 
-        if (decks.getPlayerDrawPile().size() < 1 && decks.getPlayerDiscardPile().size() < 1) {
+        if (decks.getPlayerDrawPile().isEmpty() && decks.getPlayerDiscardPile().isEmpty()) {
 
-            if (decks.getBotDrawPile().size() > 0) {
+            if (decks.getBotDrawPile().isEmpty()) {
                 decks.getPlayerDrawPile().add(decks.getBotDrawPile().get(0));
                 decks.getBotDrawPile().remove(0);
 
@@ -108,9 +108,9 @@ public class InGameActionImpl implements InGameAction {
                 decks.getBotDiscardPile().remove(0);
             }
         }
-        if (decks.getBotDrawPile().size() < 1 && decks.getBotDiscardPile().size() < 1) {
+        if (decks.getBotDrawPile().isEmpty() && decks.getBotDiscardPile().isEmpty()) {
 
-            if (decks.getPlayerDrawPile().size() > 0) {
+            if (decks.getPlayerDrawPile().isEmpty()) {
                 decks.getBotDrawPile().add(decks.getPlayerDrawPile().get(0));
                 decks.getPlayerDrawPile().remove(0);
             } else {
@@ -123,7 +123,7 @@ public class InGameActionImpl implements InGameAction {
     //    public void checkIfAndShuffle(){}
     @Override
     public void changeCards(Card playerCard, Card botCard, Decks decks, boolean playerWin) {
-        logger.info("InGameActionImpl:  changeCards hands played " + decks.getHandPlayedInRoundNumber() + "   in round:   " + decks.getRoundNumber() + "  playerCard:  " + playerCard + "    botCard:   " + botCard + "   playerWin: " + playerWin);
+        logger.info("InGameActionImpl:  changeCards hands played:  {}   in round:     {}    playerCard:   {}    botCard:  {}    playerWin:   {}", decks.getHandPlayedInRoundNumber(),decks.getRoundNumber(),playerCard,botCard , playerWin);
         if (playerWin) {
             decks.getPlayerDiscardPile().add(playerCard);
             decks.getPlayerDiscardPile().add(botCard);

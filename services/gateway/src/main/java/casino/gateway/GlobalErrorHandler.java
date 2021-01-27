@@ -18,7 +18,7 @@ import java.util.Map;
 @Produces
 @Singleton
 @Requires(classes = {Exception.class, ExceptionHandler.class})
-public class GlobalErrorHandler implements ExceptionHandler<Exception, HttpResponse<?>>{
+public class GlobalErrorHandler implements ExceptionHandler<Exception, HttpResponse<?>> {
     private final Logger logger = LoggerFactory.getLogger(GlobalErrorHandler.class);
 
     @Override
@@ -27,22 +27,18 @@ public class GlobalErrorHandler implements ExceptionHandler<Exception, HttpRespo
         logger.info(exception.toString());
         logger.info(exception.getMessage());
         logger.info(exception.getClass().toString());
-        logger.info("suppressed:  "  + Arrays.toString(exception.getSuppressed()));
+        logger.info("suppressed:  " + Arrays.toString(exception.getSuppressed()));
         logger.error("Stacktrace: ", exception);
         Map<String, String> m = new HashMap<>();
         m.put("message", exception.getMessage());
         if (exception instanceof AuthenticationException) {
-//            Map<String, String> m = new HashMap<>();
-//            m.put("message", exception.getMessage());
             logger.info(exception.getMessage());
             return HttpResponse.unauthorized().body(m);
-        } else if(exception instanceof AuthorizationException){
+        } else if (exception instanceof AuthorizationException) {
             logger.info(exception.getMessage());
             return HttpResponse.unauthorized().body(m);
-        }
-
-        else {
-            logger.info("Caught other Exception:     " + exception.getMessage());
+        } else {
+            logger.info("Caught other Exception:    {} ", exception.getMessage());
             m.put("Undefined", "Exception in gateway-casino Service");
             return HttpResponse.serverError().body(m);
         }

@@ -3,7 +3,6 @@ package casino.cardgame.domain;
 import casino.api.v1.Card;
 
 import java.util.List;
-import java.util.UUID;
 
 public class Decks {
     private final List<Card> playerDrawPile;

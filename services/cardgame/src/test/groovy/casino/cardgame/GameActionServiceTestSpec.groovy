@@ -9,32 +9,33 @@ import spock.lang.Specification
 import javax.inject.Inject
 
 @MicronautTest
-class InGameActionServiceTestSpec extends Specification {
+class GameActionServiceTestSpec extends Specification {
     @Shared
     @Inject
-    GameActionService shittyTwo;
+    GameActionService actionService
     @Shared
     @Inject
-    MongoDao dao;
+    MongoDao dao
     @Shared
     @Inject
-    InMemoRedis inMemo;
+    InMemoRedis inMemo
 
-    def "play shitty game"(){
+    def "play game"(){
         when: "create new game"
-        def mongoCardGame = shittyTwo.startGame(UUID.randomUUID(), 10).blockingGet()
+        def mongoCardGame = actionService.startGame(UUID.randomUUID(), UUID.randomUUID(), 10).blockingGet()
         then: "game should be persisted"
         def persistedGame = dao.get(mongoCardGame.gameId).blockingGet()
         mongoCardGame.toApiCardGame().finished == persistedGame.finished
         mongoCardGame.toApiCardGame().playerWin == persistedGame.playerWin
         mongoCardGame.gameId == persistedGame.gameId
         and: "InMemo game should match persisted game"
-        def inMemoGame = inMemo.getGame(mongoCardGame.gameId).blockingGet()
-        inMemoGame.rounds.size() == persistedGame.rounds.size()
-        def apiFromInMemo = inMemoGame.toApiCardGame()
-        def apiFromEnOfRound = mongoCardGame.toApiCardGame()
-        apiFromInMemo.rounds.entrySet().size() == apiFromEnOfRound.rounds.entrySet().size()
-        println "${inMemoGame.gameId}"
+        with(persistedGame) {
+            def inMemoGame = inMemo.getGame(it.gameId).blockingGet()
+            inMemoGame.rounds.size() == it.rounds.size()
+            def apiFromInMemo = inMemoGame.toApiCardGame()
+            def apiFromEndOfRound = it.toApiCardGame()
+            apiFromInMemo.rounds.entrySet().size() == apiFromEndOfRound.rounds.entrySet().size()
+        }
     }
 
 }
