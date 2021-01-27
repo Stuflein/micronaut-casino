@@ -113,7 +113,7 @@ public class MongoDecks implements Serializable {
     }
 
     private List<Card> cardListFromString(List<String> cardList) {
-        return cardList.stream().map(c -> cardFromString(c)).collect(Collectors.toList());
+        return cardList.stream().map(this::cardFromString).collect(Collectors.toList());
     }
 
     @Override

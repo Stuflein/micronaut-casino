@@ -2,7 +2,10 @@ package casino.account;
 
 import casino.account.domain.Account;
 import casino.account.exceptions.AccountAlreadyExistsException;
-import casino.api.v1.*;
+import casino.api.v1.Operations;
+import casino.api.v1.User;
+import casino.api.v1.UserCreate;
+import casino.api.v1.UserRole;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.*;
@@ -30,7 +33,7 @@ public class AccountController implements Operations<User, UserCreate> {
     /**
      * Simple Controller for CRUD Operations,
      * secured via Id check in Header
-     * Accessible only via Gateway TODO:!!Gateway check Account
+     * Accessible only via Gateway
      *
      *  accountService  the Service to connect Controller with Database
      *  securityService provided by Micronaut

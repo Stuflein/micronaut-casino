@@ -11,7 +11,6 @@ import io.vertx.reactivex.sqlclient.Tuple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.sql.SQLException;
 import java.time.Instant;
@@ -70,7 +69,6 @@ public class AccountDaoMySql implements AccountDao {
         return client.preparedQuery(sql).rxExecute(Tuple.of(id))
                 .map(RowSet::iterator).flatMap(rowIterator -> {
                     if (rowIterator.hasNext()) {
-                        logger.info("AccountDaoMySql:   getAccount for id: {}  ", id);
                         return Single.just(fromSql(rowIterator.next()));
                     } else {
                         return Single.error(new SQLException("Account not in DB"));

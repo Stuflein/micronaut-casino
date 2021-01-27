@@ -19,29 +19,18 @@ public class MongoCardGame implements Serializable {
     @BsonProperty("user")
     @JsonProperty("user")
     private UUID user;
-    //    @BsonProperty("bot")
-//    @JsonProperty("bot")
-//    private Player bot;
     @BsonProperty("wager")
     @JsonProperty("wager")
     private long wager;
     @BsonProperty("rounds")
     @JsonProperty("rounds")
     private List<MongoHand> rounds;
-    //    @BsonProperty("game_started_at")
-//    @JsonProperty("game_started_at")
-//    private LocalDateTime gameStarted;
-//    @BsonProperty("game_finished_at")
-//    @JsonProperty("game_finished_at")
-//    private LocalDateTime gameFinished;
     @BsonProperty("player_win")
     @JsonProperty("player_win")
     private boolean playerWin;
     @BsonProperty("finished")
     @JsonProperty("finished")
     private boolean finished;
-
-    //new game
 
 
     public MongoCardGame(UUID gameId, UUID user, long wager, List<MongoHand> rounds, boolean finished) {
@@ -52,8 +41,8 @@ public class MongoCardGame implements Serializable {
         this.finished = finished;
     }
 
-    public MongoCardGame(UUID user, long wager) {
-        this(UUID.randomUUID(), user, wager, new ArrayList<>(), false);
+    public MongoCardGame(UUID gameId, UUID user, long wager) {
+        this(gameId, user, wager, new ArrayList<>(), false);
     }
 
     public MongoCardGame(UUID gameId, UUID user, long wager, List<MongoHand> rounds, boolean playerWin, boolean finished) {
@@ -119,20 +108,16 @@ public class MongoCardGame implements Serializable {
     }
 
     public CardGame toApiCardGame() {
-        Map<Long, List<CardsPlayed>> rounds = this.getRounds()
-                .stream().map(a -> a.toApiHand())
+        Map<Long, List<CardsPlayed>> roundsAsMap = this.getRounds()
+                .stream().map(MongoHand::toApiHand)
                 .sorted(Comparator.comparingLong(CardsPlayed::getRoundNumber))
                 .collect(Collectors.groupingBy(
                         CardsPlayed::getRoundNumber,
                         Collectors.collectingAndThen(Collectors.toList(),
                                 cardsPlayedList -> cardsPlayedList.stream().sorted(Comparator.comparingInt(CardsPlayed::getHandPlayedInRoundNumber)).collect(Collectors.toList()))
                 ));
-//        for (List<CardsPlayed> cardsList : rounds.values()) {
-//            cardsList.stream().sorted(Comparator.comparingInt(CardsPlayed::getHandPlayedInRoundNumber)).collect(Collectors.toList());
-//        }
-
         return new CardGame(this.getGameId(), this.isFinished(), this.isPlayerWin(),
-                this.getUser(), this.getWager(), rounds);
+                this.getUser(), this.getWager(), roundsAsMap);
     }
 
     @Override

@@ -1,8 +1,5 @@
 package casino.cardgame.dao;
 
-import casino.api.v1.Card;
-import casino.api.v1.Decks;
-import casino.api.v1.Result;
 import casino.cardgame.domain.MongoCardGame;
 import casino.cardgame.domain.MongoDecks;
 import casino.cardgame.domain.MongoHand;

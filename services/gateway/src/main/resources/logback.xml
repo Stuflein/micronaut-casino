@@ -12,16 +12,13 @@
 
     <logger name="io.netty" level="INFO"/>
     <logger name="io.micronaut.security" level="INFO"/>
-    <!--    <logger name="org.springframework.security" level="INFO" />-->
     <logger name="io.micronaut.jackson" level="INFO"/>
     <logger name="io.micronaut" level="ERROR"/>
     <logger name="io.micronaut.context.condition" level="WARN"/>
     <logger name="io.micronaut.http.client" level="WARN"/>
     <logger name="io.jaegertracing:jaeger-thrift" level="TRACE"/>
-    <logger name="io.micronaut.tracing" level="TRACE"/>
     <logger name="io.micronaut.discovery" level="INFO"/>
     <logger name="io.micronaut.runtime" level="INFO"/>
-<!--    <logger name="casino.gateway" level="ALL"/>-->
 
     <root level="debug">
         <appender-ref ref="STDOUT"/>

@@ -7,28 +7,21 @@ import casino.cardgame.domain.MongoCardGame;
 import casino.cardgame.domain.MongoDecks;
 import casino.cardgame.domain.MongoHand;
 import casino.cardgame.exceptions.PersistMongoHandException;
-import com.mongodb.MongoException;
-import com.mongodb.WriteConcern;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.FindOneAndUpdateOptions;
 import com.mongodb.client.model.ReturnDocument;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.InsertManyResult;
 import com.mongodb.client.result.InsertOneResult;
-import com.mongodb.client.result.UpdateResult;
 import com.mongodb.reactivestreams.client.MongoClient;
 import com.mongodb.reactivestreams.client.MongoCollection;
-import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
-import org.reactivestreams.Publisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -50,7 +43,7 @@ public class MongoDaoImpl implements MongoDao {
     //start of game
     @Override
     public Single<Boolean> persist(MongoCardGame game) {
-        logger.info("MongoDaoImpl: persist game:  " + game.getGameId());
+        logger.info("MongoDaoImpl: persist game:  {}", game.getGameId());
         MongoCollection<MongoCardGame> collection = getGameCollection();
         return Single.fromPublisher(collection.insertOne(game)).map(InsertOneResult::wasAcknowledged);
     }
@@ -58,14 +51,13 @@ public class MongoDaoImpl implements MongoDao {
     //update after each hand
     @Override
     public Single<Boolean> persist(UUID gameId, MongoHand cardsPlayed, MongoDecks decks) {
-        logger.info("MongoDaoImpl: persist in game:  " + gameId + "  played hand number:  " + cardsPlayed.getHandPlayedInRound() + "  in round:   " + cardsPlayed.getRoundNumber());
+        logger.info("MongoDaoImpl: persist in game:  {}    played hand number:  {}   in round:   {}", gameId, cardsPlayed.getHandPlayedInRound(), cardsPlayed.getRoundNumber());
         return Single.fromPublisher(getGameCollection()
                 .updateOne(Filters.eq("_id", gameId),
                         Updates.push("rounds", cardsPlayed)))
                 .flatMap(updateResult -> {
                     if (updateResult.wasAcknowledged()) {
-                        return Single.fromPublisher(getDecksCollection().insertOne(decks)).map(result -> result.wasAcknowledged());
-//                return updateResult.wasAcknowledged();
+                        return Single.fromPublisher(getDecksCollection().insertOne(decks)).map(InsertOneResult::wasAcknowledged);
                     } else
                         return Single.error(new PersistMongoHandException(cardsPlayed.getHandId(), "UpdateResult for cardsplayed in game: " + gameId + "  not acknowledged  -> round: " + cardsPlayed.getRoundNumber() + "  handplayed in round:  " + cardsPlayed.getHandPlayedInRound()));
                 });
@@ -78,13 +70,13 @@ public class MongoDaoImpl implements MongoDao {
     @Override
     public Single<Boolean> persist(long round, int cardsPlayedInRound, Result result, Card playerCard, Card botCard, UUID gameId, Decks decks) {
         UUID handId = UUID.randomUUID();
-        logger.info("MongoDaoImpl: persist in game:  " + gameId + "  played hand number:  " + cardsPlayedInRound + "  in round:   " + round + "  with result:  " + result);
+        logger.info("MongoDaoImpl: persist in game:  {}   played hand number:  {}     in round:   {}    with result:  {} ", gameId, cardsPlayedInRound, round, result);
         MongoHand hand = new MongoHand(round, cardsPlayedInRound, result, playerCard, botCard, handId);
         MongoDecks mongoDecks = new MongoDecks(decks, handId);
         return Single.fromPublisher(getGameCollection().updateOne(Filters.eq("_id", gameId),
                 Updates.push("rounds", hand))).flatMap(updateResult -> {
             if (updateResult.wasAcknowledged()) {
-                return Single.fromPublisher(getDecksCollection().insertOne(mongoDecks)).map(updateRes -> updateRes.wasAcknowledged());
+                return Single.fromPublisher(getDecksCollection().insertOne(mongoDecks)).map(InsertOneResult::wasAcknowledged);
             } else
                 return Single.error(new PersistMongoHandException(handId, "UpdateResult for cardsplayed in game: " + gameId + "  not acknowledged  -> round: " + round + "  handplayed in round:  " + cardsPlayedInRound));
         });
@@ -93,7 +85,7 @@ public class MongoDaoImpl implements MongoDao {
     //update end of game
     @Override
     public Single<MongoCardGame> persistAndGet(UUID gameId, boolean playerWin) {
-        logger.info("MongoDaoImpl:   persistAndGet  game:  " + gameId);
+        logger.info("MongoDaoImpl:   persistAndGet  game:  {}", gameId);
         return Single.fromPublisher(getGameCollection().findOneAndUpdate(
                 Filters.eq("_id", gameId),
                 Updates.combine(Updates.set("finished", true), Updates.set("player_win", playerWin)),
@@ -103,7 +95,7 @@ public class MongoDaoImpl implements MongoDao {
 
     @Override
     public Single<Boolean> persist(UUID gameId, boolean playerWin) {
-        logger.info("MongoDaoImpl:   persist  game:  " + gameId + "   playerWin:  " + playerWin);
+        logger.info("MongoDaoImpl:   persist  game:  {}   playerWin:    {}", gameId, playerWin);
 
         return Single.fromPublisher(
                 getGameCollection().updateOne(
@@ -137,16 +129,11 @@ public class MongoDaoImpl implements MongoDao {
 //                .codecRegistry(pojoCodecRegistry).build();
 //    }
     private MongoCollection<MongoCardGame> getGameCollection() {
-
-//        MongoClient reactiveClient = MongoClients.create(initClientSettings(MongoCardGame.class));
         return gameClient.getDatabase("cardgameDB").getCollection("cardgame", MongoCardGame.class);
     }
 
     private MongoCollection<MongoDecks> getDecksCollection() {
-
-//        MongoClient reactiveClient = MongoClients.create(initClientSettings(MongoCardGame.class));
         return decksClient.getDatabase("cardgameDB").getCollection("decks", MongoDecks.class);
     }
-
 
 }

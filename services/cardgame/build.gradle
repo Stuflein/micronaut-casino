@@ -1,16 +1,11 @@
 plugins {
     id 'groovy'
-//    id 'java'
     id "net.ltgt.apt-eclipse" version "0.21"
     id "com.github.johnrengelman.shadow" version "5.2.0"
     id "application"
     id "io.spring.dependency-management" version "1.0.10.RELEASE"
     id 'idea'
 }
-
-//apply plugin:"application"
-//apply plugin:"groovy"
-//apply plugin:"java"
 
 
 group 'casino'
@@ -49,7 +44,6 @@ dependencies {
 
     //security
     implementation("io.micronaut.security:micronaut-security-annotations")
-    // compileOnly("io.micronaut.security:micronaut-security-annotations")
     annotationProcessor "io.micronaut.security:micronaut-security-annotations"
     implementation 'io.micronaut.security:micronaut-security-jwt'
 
@@ -59,9 +53,7 @@ dependencies {
     runtimeOnly "io.micronaut:micronaut-discovery-client"
 
     //caching
-//    implementation("io.micronaut.cache:micronaut-cache-caffeine")
     implementation("io.micronaut.redis:micronaut-redis-lettuce")
-//    implementation("io.micronaut.cache:micronaut-cache-core")
 
     //Call-Tracing--Jaeger
     implementation("io.micronaut:micronaut-tracing")
@@ -85,17 +77,6 @@ dependencies {
 
     //MongoDB  micronaut
     implementation("io.micronaut.mongodb:micronaut-mongo-reactive")
-//    runtime group: 'io.micronaut.data', name: 'micronaut-data-jdbc', version: '2.2.1'
-//    implementation "io.micronaut.configuration:micronaut-mongo-gorm"
-//    implementation 'io.micronaut.configuration:micronaut-mongo-reactive:2.0.1'
-//    implementation "org.grails:grails-datastore-gorm-mongodb:7.0.0.RELEASE"
-
-//    api("org.mongodb:mongodb-driver-reactivestreams:$mongoReactiveVersion") {
-//        exclude group:'org.mongodb', module:'mongodb-driver-async'
-//    }
-    //hibernae ogm mongo
-//    implementation 'org.hibernate.ogm:hibernate-ogm-mongodb:5.4.1.Final'
-//    implementation 'org.hibernate.ogm:hibernate-ogm-infinispan-embedded:5.4.1.Final'
 
 
 
@@ -105,17 +86,11 @@ dependencies {
     testImplementation("org.spockframework:spock-core") {
         exclude group: "org.codehaus.groovy", module: "groovy-all"
     }
-//    testCompile group: 'com.athaydes', name: 'spock-reports', version: '1.2.10'
+
     testImplementation "io.micronaut:micronaut-inject-groovy"
     testImplementation "io.micronaut.test:micronaut-test-spock"
     testImplementation "io.micronaut.test:micronaut-test-junit5"
 
-//    testImplementation "io.micronaut:micronaut-inject-groovy"
-//    testImplementation "io.micronaut.test:micronaut-test-spock"
-//    testImplementation "io.micronaut.test:micronaut-test-junit5"
-//    testImplementation "org.junit.jupiter:junit-jupiter-api"
-//    testImplementation "de.flapdoodle.embed:de.flapdoodle.embed.mongo:2.0.1"
-//    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
 }
 
 test.classpath += configurations.developmentOnly

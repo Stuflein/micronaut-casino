@@ -128,8 +128,4 @@ class AccountControllerTestSpec extends Specification {
         successDeleted
     }
 
-//    def cleanupSpec() {
-//        client.close()
-//        embeddedServer.close()
-//    }
 }
