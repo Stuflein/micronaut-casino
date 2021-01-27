@@ -1,0 +1,113 @@
+micronaut:
+  io:
+    watch:
+      paths: src/main
+      enabled: true
+  application:
+    name: data-casino
+  server:
+    host: localhost
+    port: 8093
+    cors:
+      enabled: true
+      configurations:
+        web:
+          allowedOrigins:
+            - http://localhost:4040
+            - http://localhost:8091
+            - http://localhost:8093
+          exposedHeaders:
+            - Content-Type
+            - Authorization
+            - Date
+    log-handled-exceptions: true
+  security:
+    authentication: bearer
+    token:
+      jwt:
+        signatures:
+          secret:
+            generator:
+              secret: 'MeinGeheimnisbleitGeheimMeinGeheMeinGeheimnisbleitGeheimMeinGehe'
+              jws-algorithm: HS256
+              base64: true
+            validation:
+              secret: 'MeinGeheimnisbleitGeheimMeinGeheMeinGeheimnisbleitGeheimMeinGehe'
+      propagation:
+        header:
+          enabled: true
+          header-name: "Authorization"
+          prefix: "Bearer "
+        enabled: true
+        service-id-regex: "gateway-casino|cardgame-casino|account-casino"
+    endpoints:
+      login:
+        enabled: false #CustomLoginController
+    http:
+      services:
+        gateway-casino:
+          urls:
+            - "http://localhost:4040"
+        cardgame-casino:
+          urls:
+            - "http://localhost:8092"
+        account-casino:
+          urls:
+            - 'http://localhost:8091'
+endpoints:
+  env:
+    enabled: true
+    sensitive: false
+  loggers:
+    enabled: true
+    sensitive: false
+  beans:
+    enabled: true
+    sensitive: false
+  info:
+    enabled: true
+    sensitive: false
+  routes:
+    enabled: true
+    sensitive: false
+  health:
+    enabled: true
+    sensitive: false
+    details-visible: ANONYMOUS
+  metrics:
+    enabled: true
+    sensitive: false
+  flyway:
+    enabled: true
+    sensitive: false
+jackson:
+  module-scan: true
+  bean-introspection-module: true
+  locale: de_DE
+  time-zone: Europe/Berlin
+
+datasources:
+  default:
+    url: 'jdbc:postgresql://localhost:5432/postgres?useSSL=false&allowPublicKeyRetrieval=true'
+    driver-class-name: "org.postgresql.Driver"
+    dialect: postgres
+    username: root
+    password: dev
+jpa.default.properties.hibernate.hbm2ddl.auto: none
+
+flyway:
+  datasources:
+    default:
+      enabled: true
+consul:
+  client:
+    registration:
+      enabled: true
+    defaultZone: "${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}"
+tracing:
+  jaeger:
+    enabled: true
+    sampler:
+      propability: 1
+    sender:
+      agent-port: 6831

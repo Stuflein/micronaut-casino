@@ -16,10 +16,6 @@ import java.util.Optional;
 public class CasinoAuthProviderUserPassword implements AuthenticationProvider {
     /**
      * AuthenticationProvider for UsernamePasswordCredentials
-     *
-     * @param passwordEncoder  Match provided password to password in DB
-     * @param authoritiesFetcher  Get CasinoUserRoles for Account name
-     * @param userFetcher  Get Account for username
      */
 
 
@@ -28,6 +24,12 @@ public class CasinoAuthProviderUserPassword implements AuthenticationProvider {
     private final PasswordEncoder passwordEncoder;
     private final CasinoAuthoritiesFetcher authoritiesFetcher;
     private final CasinoUserFetcher userFetcher;
+
+    /**
+     * @param passwordEncoder  Match provided password to password in DB
+     * @param authoritiesFetcher  Get CasinoUserRoles for Account name
+     * @param userFetcher  Get Account for username
+     * */
 
     public CasinoAuthProviderUserPassword(PasswordEncoder passwordEncoder, CasinoAuthoritiesFetcher authoritiesFetcher, CasinoUserFetcher userFetcher) {
         this.passwordEncoder = passwordEncoder;
@@ -38,16 +40,16 @@ public class CasinoAuthProviderUserPassword implements AuthenticationProvider {
     @Override
     public Publisher<AuthenticationResponse> authenticate(HttpRequest<?> httpRequest, AuthenticationRequest<?, ?> authenticationRequest) {
         final String username = authenticationRequest.getIdentity().toString();
-        logger.info("CasinoAuthProviderUserPassword:   authenticate user:   " + username);
+        logger.info("CasinoAuthProviderUserPassword:   authenticate user:   {}", username);
         Flowable<UserState> userStateFlowable = Flowable.fromPublisher(userFetcher.findByUsername(username));
         return Flowable.fromPublisher(userStateFlowable
                 .switchMap(user -> {
                     Optional<AuthenticationFailed> authFailed = validate(user, authenticationRequest);
                     if (authFailed.isPresent()) {
-                        logger.info("CasinoAuthProviderUserPassword:    authenticate() user: " + username + "  : authFailed");
+                        logger.info("CasinoAuthProviderUserPassword:    authenticate() user: {}  : authFailed", username);
                         return Flowable.just(authFailed.get());
                     } else {
-                        logger.info("CasinoAuthProviderUserPassword:    authenticate()  user:  " + username + "  :  authSuccess");
+                        logger.info("CasinoAuthProviderUserPassword:    authenticate()  user:   {}   :  authSuccess", username);
                         return createSuccessfulAuthenticationResponse(authenticationRequest, user);
                     }
                 }));
@@ -61,23 +63,23 @@ public class CasinoAuthProviderUserPassword implements AuthenticationProvider {
             authenticationFailed = new AuthenticationFailed(AuthenticationFailureReason.USER_NOT_FOUND);
 
         } else if (!user.isEnabled()) {
-            logger.info("user not enabled:    " + user.getUsername());
+            logger.info("user not enabled:    {}", user.getUsername());
             authenticationFailed = new AuthenticationFailed(AuthenticationFailureReason.USER_DISABLED);
 
         } else if (user.isAccountExpired()) {
-            logger.info("Account is expired:    " + user.getUsername());
+            logger.info("Account is expired:    {}", user.getUsername());
             authenticationFailed = new AuthenticationFailed(AuthenticationFailureReason.ACCOUNT_EXPIRED);
 
         } else if (user.isAccountLocked()) {
-            logger.info("Account is locked:   " + user.getUsername());
+            logger.info("Account is locked:   {}", user.getUsername());
             authenticationFailed = new AuthenticationFailed(AuthenticationFailureReason.ACCOUNT_LOCKED);
 
         } else if (user.isPasswordExpired()) {
-            logger.info("Password is expired:     " + user.getUsername());
+            logger.info("Password is expired:     {}", user.getUsername());
             authenticationFailed = new AuthenticationFailed(AuthenticationFailureReason.PASSWORD_EXPIRED);
 
         } else if (!passwordEncoder.matches(authenticationRequest.getSecret().toString(), user.getPassword())) {
-            logger.info("Password doesnt match:    " + user.getUsername());
+            logger.info("Password doesnt match:    {}", user.getUsername());
             authenticationFailed = new AuthenticationFailed(AuthenticationFailureReason.CREDENTIALS_DO_NOT_MATCH);
         }
         return Optional.ofNullable(authenticationFailed);
@@ -88,7 +90,7 @@ public class CasinoAuthProviderUserPassword implements AuthenticationProvider {
         return Flowable.fromPublisher(authoritiesFetcher.findAuthoritiesByUsername(user.getUsername()))
                 .map(authoritiesList -> {
                     Account account = ((AccountUserState) user).getAccount();
-                    logger.info("CasinoAuthProviderUserPassword:   " + account.getId());
+                    logger.info("CasinoAuthProviderUserPassword:   {}", account.getId());
                     return new CasinoUserDetails(user.getUsername(), authoritiesList, account.getId());
                 });
     }

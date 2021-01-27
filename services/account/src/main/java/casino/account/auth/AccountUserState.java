@@ -7,7 +7,7 @@ public class AccountUserState implements UserState {
     /**
      * Get the AccountUserState for Security
      *
-     * @param account  The Account to get the AccountUserState for
+     *  account  The Account to get the AccountUserState for
      */
 
     private final Account account;

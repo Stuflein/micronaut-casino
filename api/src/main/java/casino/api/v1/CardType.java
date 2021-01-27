@@ -17,7 +17,7 @@ public enum CardType {
         this.cardType = cardType;
     }
 
-    //        @JsonValue
+
     public String getCardType() {
         return cardType;
     }

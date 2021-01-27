@@ -38,26 +38,13 @@ micronaut:
                             base64: true
                         validation:
                             secret: 'MeinGeheimnisbleitGeheimMeinGeheMeinGeheimnisbleitGeheimMeinGehe'
-
-#                generator:
-#                    refresh-token:
-#                        secret: 'MeinGeheimnisbleitGeheimMeinGeheMeinGeheimnisbleitGeheimMeinGehe'
-#                        enabled: true
-#                        base64: true
-#                        jws-algorithm: HS256
-            #                encryptions:
-#                    secret:
-#                        generator:
-#                            secret: 'EncryptionSecretIsSecretlySecretEncryptionSecretIsSecretlySecret'
-#                            jwe-algorithm: A128KW
-#                            encryption-method: A128CBC_HS256  #TODO: nicht dass es hieran scheitert
             propagation:
                 header:
                     enabled: true
                     header-name: "Authorization"
                     prefix: "Bearer "
                 enabled: true
-                service-id-regex: "gateway-casino|cardgame-casino"
+                service-id-regex: "gateway-casino|cardgame-casino|data-casino"
         endpoints:
             login:
                 enabled: false #CustomLoginController
@@ -81,10 +68,9 @@ micronaut:
                 cardgame-casino:
                     urls:
                         - "http://localhost:8092"
-#    caches:
-#        users:
-#            charset: 'UTF-8'
-
+                data-casino:
+                    urls:
+                        - 'http:localhost:8093'
 endpoints:
     env:
         enabled: true
@@ -100,11 +86,10 @@ endpoints:
         sensitive: false
     routes:
         enabled: true
-        sensitive: false #damit kein auth check
-#        details-visible: ANONYMOUS
+        sensitive: false
     health:
         enabled: true
-        sensitive: false #damit kein auth check
+        sensitive: false
         details-visible: ANONYMOUS
     metrics:
         enabled: true
@@ -128,23 +113,10 @@ vertx:
             user: root
             password: dev
             max-size: 5
-datasources:
-    default:
-        url: "jdbc:mysql://localhost:3306/casino_db?useSSL=false&allowPublicKeyRetrieval=true"
-        driverClassName: "com.mysql.cj.jdbc.Driver"
-        dialect: "MYSQL"
-        username: "root"
-        password: "dev"
-        default-schema: casino_db
-flyway:
-    datasources:
-        default:
-            enabled: true
 consul:
     client:
         registration:
             enabled: true
-#            fail-fast: false
         defaultZone: "${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}"
 tracing:
     jaeger:

@@ -14,4 +14,7 @@ out/
 # Log file
 *.log
 /docker/
-/db/
+/db/db.mongo-volume
+/db/db.mySqlDB-volume
+/db/db.redis
+/db/db.postgres-volume

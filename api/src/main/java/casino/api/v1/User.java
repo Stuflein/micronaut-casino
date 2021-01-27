@@ -43,7 +43,7 @@ public class User implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
         return getCredit() == user.getCredit() &&
-                getEmail() == user.getEmail() &&
+                getEmail().equals(user.getEmail()) &&
                 getUserId().equals(user.getUserId()) &&
                 getUsername().equals(user.getUsername());
     }

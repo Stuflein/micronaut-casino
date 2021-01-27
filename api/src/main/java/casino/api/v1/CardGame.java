@@ -14,7 +14,6 @@ public class CardGame implements Serializable {
     private boolean isFinished;
     private boolean playerWin;
     private UUID user;
-//    private Player bot;
     private long wager;
     private Map<Long, List<CardsPlayed>> rounds;
 
@@ -22,12 +21,11 @@ public class CardGame implements Serializable {
     public CardGame() {
     }
 
-    public CardGame(UUID gameId, boolean isFinished, boolean playerWin, UUID user,  long wager, Map<Long, List<CardsPlayed>> rounds) {
+    public CardGame(UUID gameId, boolean isFinished, boolean playerWin, UUID user, long wager, Map<Long, List<CardsPlayed>> rounds) {
         this.gameId = gameId;
         this.isFinished = isFinished;
         this.playerWin = playerWin;
         this.user = user;
-//        this.bot = bot;
         this.wager = wager;
         this.rounds = rounds;
     }
@@ -48,7 +46,7 @@ public class CardGame implements Serializable {
         return wager;
     }
 
-    public Map<Long, List<CardsPlayed>>  getRounds() {
+    public Map<Long, List<CardsPlayed>> getRounds() {
         return rounds;
     }
 
