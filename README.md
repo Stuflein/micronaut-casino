@@ -42,3 +42,4 @@
   - Implement ORM persistence with JPA and Hibernate
   - Micronaut cache for account-db queries
   - Refactor gradle scripts for proper multi-module build
+  - Implement proper call tracing
