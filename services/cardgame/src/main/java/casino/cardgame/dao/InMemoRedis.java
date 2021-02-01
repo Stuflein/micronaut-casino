@@ -39,7 +39,7 @@ public class InMemoRedis implements InMemo {
             return convertMapToHand(client.hgetall(handHashKey).toCompletableFuture().join());
         }).collect(Collectors.toList());
         return Single.just(new MongoCardGame(UUID.fromString(gameMap.get("id")), UUID.fromString(gameMap.get("user")), Long.parseLong(gameMap.get("wager")),
-                handList, Boolean.parseBoolean(gameMap.get("playerWin")), Boolean.parseBoolean(gameMap.get("isFinished"))));
+                handList, Boolean.parseBoolean(gameMap.get("playerWin")), Boolean.parseBoolean(gameMap.get("finished"))));
 
     }
 
@@ -48,7 +48,7 @@ public class InMemoRedis implements InMemo {
         String gameKey = getGameKey(gameId);
         Map<String, String> gameMap = new HashMap<>();
         gameMap.put("playerWin", String.valueOf(playerWin));
-        gameMap.put("isFinished", String.valueOf(true));
+        gameMap.put("finished", String.valueOf(true));
         long gameResult = client.hset(gameKey, gameMap).toCompletableFuture().join();
         return Single.just(gameResult == 2L);
     }

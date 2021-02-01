@@ -99,7 +99,7 @@ public class InGameActionImpl implements InGameAction {
 
         if (decks.getPlayerDrawPile().isEmpty() && decks.getPlayerDiscardPile().isEmpty()) {
 
-            if (decks.getBotDrawPile().isEmpty()) {
+            if (!decks.getBotDrawPile().isEmpty()) {
                 decks.getPlayerDrawPile().add(decks.getBotDrawPile().get(0));
                 decks.getBotDrawPile().remove(0);
 
@@ -110,7 +110,7 @@ public class InGameActionImpl implements InGameAction {
         }
         if (decks.getBotDrawPile().isEmpty() && decks.getBotDiscardPile().isEmpty()) {
 
-            if (decks.getPlayerDrawPile().isEmpty()) {
+            if (!decks.getPlayerDrawPile().isEmpty()) {
                 decks.getBotDrawPile().add(decks.getPlayerDrawPile().get(0));
                 decks.getPlayerDrawPile().remove(0);
             } else {
@@ -120,7 +120,6 @@ public class InGameActionImpl implements InGameAction {
         }
     }
 
-    //    public void checkIfAndShuffle(){}
     @Override
     public void changeCards(Card playerCard, Card botCard, Decks decks, boolean playerWin) {
         logger.info("InGameActionImpl:  changeCards hands played:  {}   in round:     {}    playerCard:   {}    botCard:  {}    playerWin:   {}", decks.getHandPlayedInRoundNumber(),decks.getRoundNumber(),playerCard,botCard , playerWin);

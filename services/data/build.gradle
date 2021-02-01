@@ -49,7 +49,7 @@ dependencies {
 
     //Micronaut data
     runtimeOnly("org.postgresql:postgresql")
-    compile group: 'org.postgresql', name: 'postgresql', version: '42.2.18'
+    implementation( 'org.postgresql:postgresql:42.2.18')
     implementation("io.micronaut.sql:micronaut-jdbc-hikari")
     implementation("io.micronaut.sql:micronaut-vertx-pg-client")
     annotationProcessor("io.micronaut.data:micronaut-data-processor:2.2.4")

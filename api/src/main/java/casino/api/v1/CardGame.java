@@ -7,11 +7,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+//@Introspected
 public class CardGame implements Serializable {
 
 
     private UUID gameId;
-    private boolean isFinished;
+    private boolean finished;
     private boolean playerWin;
     private UUID user;
     private long wager;
@@ -21,9 +22,9 @@ public class CardGame implements Serializable {
     public CardGame() {
     }
 
-    public CardGame(UUID gameId, boolean isFinished, boolean playerWin, UUID user, long wager, Map<Long, List<CardsPlayed>> rounds) {
+    public CardGame(UUID gameId, boolean finished, boolean playerWin, UUID user, long wager, Map<Long, List<CardsPlayed>> rounds) {
         this.gameId = gameId;
-        this.isFinished = isFinished;
+        this.finished = finished;
         this.playerWin = playerWin;
         this.user = user;
         this.wager = wager;
@@ -35,7 +36,7 @@ public class CardGame implements Serializable {
     }
 
     public boolean isFinished() {
-        return isFinished;
+        return finished;
     }
 
     public UUID getUser() {

@@ -116,8 +116,13 @@ public class MongoCardGame implements Serializable {
                         Collectors.collectingAndThen(Collectors.toList(),
                                 cardsPlayedList -> cardsPlayedList.stream().sorted(Comparator.comparingInt(CardsPlayed::getHandPlayedInRoundNumber)).collect(Collectors.toList()))
                 ));
-        return new CardGame(this.getGameId(), this.isFinished(), this.isPlayerWin(),
-                this.getUser(), this.getWager(), roundsAsMap);
+        return new CardGame(
+                this.getGameId(),
+                this.isFinished(),
+                this.isPlayerWin(),
+                this.getUser(),
+                this.getWager(),
+                roundsAsMap);
     }
 
     @Override
